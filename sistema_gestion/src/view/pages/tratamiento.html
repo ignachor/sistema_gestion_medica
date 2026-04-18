@@ -1,0 +1,1176 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Catálogo de Tratamientos — Panel Médico</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Cormorant+Garamond:ital,wght@0,300;1,300&display=swap" rel="stylesheet">
+  <style>
+    /* ══════════════════════════════════════════
+       TRATAMIENTOS — hoja de estilos autosuficiente
+       ══════════════════════════════════════════ */
+    :root {
+      --rosa: #FFB6D9;
+      --rosa-light: #FFD6EC;
+      --rosa-pale: #FFF0F7;
+      --rosa-mid: #F590C4;
+      --dorado: #D4AF37;
+      --dorado-light: #E8D080;
+      --dorado-pale: #FBF6E3;
+      --negro: #1A1A1A;
+      --negro-mid: #2E2E2E;
+      --gris: #6B6B6B;
+      --gris-light: #A8A8A8;
+      --gris-bg: #F7F6F3;
+      --blanco: #FFFFFF;
+      --crema: #FDFAF6;
+      --borde: #F0EBE3;
+      --borde-gris: #E8E4DF;
+      --mont: 'Montserrat', sans-serif;
+      --serif: 'Cormorant Garamond', Georgia, serif;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; font-family: var(--mont); color: var(--negro); }
+
+    body.tratamientos-page {
+      background: var(--gris-bg);
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    /* ─ Topbar ─ */
+    .topbar {
+      background: var(--blanco);
+      border-bottom: 1px solid var(--borde);
+      padding: 0.85rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+    .breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.8rem;
+    }
+    .breadcrumb a {
+      color: var(--gris);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+    .breadcrumb a:hover { color: var(--negro); }
+    .breadcrumb-sep { color: var(--gris-light); }
+    .breadcrumb-current { color: var(--negro); font-weight: 500; }
+
+    /* ─ Layout ─ */
+    .layout {
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      flex: 1;
+    }
+
+    /* ─ Sidebar ─ */
+    .sidebar {
+      background: var(--blanco);
+      border-right: 1px solid var(--borde);
+      padding: 1.5rem 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+    .sidebar-title {
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--gris);
+      margin-bottom: 0.75rem;
+    }
+    .filter-group { display: flex; flex-direction: column; gap: 0.55rem; }
+    .filter-checkbox {
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+      cursor: pointer;
+      font-size: 0.85rem;
+      color: var(--negro-mid);
+      padding: 0.35rem 0.4rem;
+      border-radius: 6px;
+      transition: background 0.2s;
+    }
+    .filter-checkbox:hover { background: var(--rosa-pale); }
+    .filter-checkbox input { accent-color: var(--rosa-mid); }
+
+    .filter-divider { height: 1px; background: var(--borde); margin: 0.25rem 0; }
+
+    .filter-select {
+      width: 100%;
+      padding: 0.55rem 0.7rem;
+      border: 1px solid var(--borde-gris);
+      border-radius: 6px;
+      font-family: var(--mont);
+      font-size: 0.82rem;
+      color: var(--negro-mid);
+      background: var(--blanco);
+      cursor: pointer;
+    }
+    .filter-select:focus { outline: none; border-color: var(--rosa-mid); }
+
+    .btn-clear {
+      margin-top: 0.5rem;
+      padding: 0.55rem 0.75rem;
+      border: 1px solid var(--borde-gris);
+      background: var(--blanco);
+      color: var(--gris);
+      border-radius: 6px;
+      font-family: var(--mont);
+      font-size: 0.78rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-clear:hover { border-color: var(--rosa-mid); color: var(--negro); }
+
+    /* ─ Contenido principal ─ */
+    .content { padding: 1.75rem 2rem; }
+
+    .page-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1.1rem;
+      border-bottom: 1px solid var(--borde);
+    }
+    .page-title {
+      font-family: var(--serif);
+      font-size: 2.1rem;
+      font-weight: 300;
+      color: var(--negro);
+      letter-spacing: 0.02em;
+    }
+    .page-title em {
+      color: var(--dorado);
+      font-style: italic;
+    }
+    .page-subtitle {
+      font-size: 0.82rem;
+      color: var(--gris);
+      margin-top: 0.3rem;
+      letter-spacing: 0.02em;
+    }
+    .btn-new {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--negro);
+      color: var(--blanco);
+      border: none;
+      padding: 0.75rem 1.4rem;
+      border-radius: 6px;
+      font-family: var(--mont);
+      font-size: 0.82rem;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+      transition: all 0.25s;
+    }
+    .btn-new:hover {
+      background: var(--dorado);
+      color: var(--negro);
+    }
+
+    /* ─ Buscador ─ */
+    .search-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      align-items: center;
+    }
+    .search-box {
+      position: relative;
+      background: var(--blanco);
+      border: 1px solid var(--borde-gris);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      padding: 0 0.9rem;
+      transition: border-color 0.2s;
+    }
+    .search-box:focus-within { border-color: var(--rosa-mid); }
+    .search-icon { color: var(--gris-light); flex-shrink: 0; }
+    .search-input {
+      flex: 1;
+      border: none;
+      background: transparent;
+      padding: 0.85rem 0.6rem;
+      font-family: var(--mont);
+      font-size: 0.88rem;
+      color: var(--negro);
+      outline: none;
+    }
+    .results-count {
+      font-size: 0.78rem;
+      color: var(--gris);
+      letter-spacing: 0.03em;
+    }
+    .results-count strong { color: var(--negro); font-weight: 600; }
+
+    /* ─ Categoría sección ─ */
+    .category-section { margin-bottom: 2.25rem; }
+    .category-header {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      margin-bottom: 1rem;
+    }
+    .category-marker {
+      width: 4px;
+      height: 22px;
+      border-radius: 2px;
+    }
+    .category-marker.estetica { background: var(--rosa-mid); }
+    .category-marker.clinica { background: var(--dorado); }
+    .category-name {
+      font-family: var(--serif);
+      font-size: 1.35rem;
+      font-weight: 400;
+      color: var(--negro);
+      letter-spacing: 0.02em;
+    }
+    .category-count {
+      font-size: 0.72rem;
+      color: var(--gris);
+      background: var(--blanco);
+      border: 1px solid var(--borde);
+      padding: 0.18rem 0.55rem;
+      border-radius: 99px;
+      letter-spacing: 0.05em;
+    }
+
+    /* ─ Grid de tratamientos ─ */
+    .treatments-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1rem;
+    }
+    .treatment-card {
+      background: var(--blanco);
+      border: 1px solid var(--borde);
+      border-radius: 10px;
+      padding: 1.1rem 1.15rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.7rem;
+      transition: all 0.25s;
+    }
+    .treatment-card:hover {
+      border-color: var(--rosa-mid);
+      box-shadow: 0 6px 18px rgba(245, 144, 196, 0.12);
+      transform: translateY(-2px);
+    }
+    .treatment-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 0.5rem;
+    }
+    .treatment-name {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--negro);
+      letter-spacing: 0.01em;
+      line-height: 1.3;
+    }
+    .badge {
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.22rem 0.55rem;
+      border-radius: 99px;
+      flex-shrink: 0;
+    }
+    .badge-estetica {
+      background: var(--rosa-pale);
+      color: var(--rosa-mid);
+      border: 1px solid var(--rosa-light);
+    }
+    .badge-clinica {
+      background: var(--dorado-pale);
+      color: var(--dorado);
+      border: 1px solid var(--dorado-light);
+    }
+
+    .treatment-desc {
+      font-size: 0.78rem;
+      color: var(--gris);
+      line-height: 1.5;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      min-height: 2.4em;
+    }
+
+    .treatment-meta {
+      display: flex;
+      gap: 0.85rem;
+      font-size: 0.76rem;
+      color: var(--negro-mid);
+      padding-top: 0.55rem;
+      border-top: 1px dashed var(--borde);
+    }
+    .meta-item {
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+    .meta-item svg { color: var(--gris-light); }
+    .meta-price { color: var(--dorado); font-weight: 600; margin-left: auto; }
+
+    .treatment-actions {
+      display: flex;
+      gap: 0.4rem;
+      margin-top: 0.2rem;
+    }
+    .btn-action {
+      flex: 1;
+      padding: 0.5rem 0.7rem;
+      border: 1px solid var(--borde-gris);
+      background: var(--blanco);
+      color: var(--negro-mid);
+      font-family: var(--mont);
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.35rem;
+    }
+    .btn-action.primary {
+      background: var(--negro);
+      color: var(--blanco);
+      border-color: var(--negro);
+    }
+    .btn-action:hover { border-color: var(--rosa-mid); color: var(--negro); }
+    .btn-action.primary:hover { background: var(--dorado); border-color: var(--dorado); color: var(--negro); }
+
+    /* ─ Modal ─ */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(26, 26, 26, 0.5);
+      backdrop-filter: blur(3px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      padding: 1.5rem;
+    }
+    .modal-overlay.active { display: flex; }
+    .modal {
+      background: var(--blanco);
+      border-radius: 12px;
+      width: 100%;
+      max-width: 640px;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 1.75rem 1.85rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.1rem;
+    }
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 0.9rem;
+      border-bottom: 1px solid var(--borde);
+    }
+    .modal-title {
+      font-family: var(--serif);
+      font-size: 1.55rem;
+      font-weight: 300;
+      color: var(--negro);
+    }
+    .modal-title em { color: var(--dorado); font-style: italic; }
+    .modal-close {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--gris);
+      padding: 0.3rem;
+      border-radius: 4px;
+      transition: all 0.2s;
+    }
+    .modal-close:hover { background: var(--rosa-pale); color: var(--negro); }
+
+    .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .form-label {
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--gris);
+    }
+    .form-input, .form-select, .form-textarea {
+      width: 100%;
+      padding: 0.65rem 0.8rem;
+      border: 1px solid var(--borde-gris);
+      border-radius: 6px;
+      font-family: var(--mont);
+      font-size: 0.85rem;
+      color: var(--negro);
+      background: var(--blanco);
+      transition: border-color 0.2s;
+    }
+    .form-input:focus, .form-select:focus, .form-textarea:focus {
+      outline: none;
+      border-color: var(--rosa-mid);
+    }
+    .form-textarea { min-height: 110px; resize: vertical; font-family: var(--mont); }
+    .form-hint {
+      font-size: 0.7rem;
+      color: var(--gris-light);
+      letter-spacing: 0.02em;
+      margin-top: 0.2rem;
+    }
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 0.6rem;
+      padding-top: 0.9rem;
+      border-top: 1px solid var(--borde);
+    }
+    .btn-secondary, .btn-primary {
+      padding: 0.7rem 1.4rem;
+      border-radius: 6px;
+      font-family: var(--mont);
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+      border: 1px solid var(--borde-gris);
+      transition: all 0.25s;
+    }
+    .btn-secondary { background: var(--blanco); color: var(--gris); }
+    .btn-secondary:hover { border-color: var(--negro); color: var(--negro); }
+    .btn-primary {
+      background: var(--negro);
+      color: var(--blanco);
+      border-color: var(--negro);
+    }
+    .btn-primary:hover {
+      background: var(--dorado);
+      border-color: var(--dorado);
+      color: var(--negro);
+    }
+
+    /* ─ Responsive ─ */
+    @media (max-width: 900px) {
+      .layout { grid-template-columns: 1fr; }
+      .sidebar { border-right: none; border-bottom: 1px solid var(--borde); }
+      .form-row { grid-template-columns: 1fr; }
+      .page-header { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body class="tratamientos-page">
+
+<!-- Topbar -->
+<div class="topbar">
+  <div class="breadcrumb">
+    <a onclick="window.location.href='index.html'">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+      Dashboard
+    </a>
+    <span class="breadcrumb-sep">/</span>
+    <span class="breadcrumb-current">Catálogo de Tratamientos</span>
+  </div>
+</div>
+
+<div class="layout">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div>
+      <h3 class="sidebar-title">Categoría</h3>
+      <div class="filter-group">
+        <label class="filter-checkbox">
+          <input type="checkbox" name="cat" value="clinica" checked>
+          <span>Clínica General</span>
+        </label>
+        <label class="filter-checkbox">
+          <input type="checkbox" name="cat" value="estetica" checked>
+          <span>Medicina Estética</span>
+        </label>
+      </div>
+    </div>
+
+    <div class="filter-divider"></div>
+
+    <div>
+      <h3 class="sidebar-title">Ordenar por</h3>
+      <select class="filter-select">
+        <option value="az">A — Z (Nombre)</option>
+        <option value="za">Z — A (Nombre)</option>
+        <option value="duracion">Duración</option>
+        <option value="precio">Precio</option>
+      </select>
+    </div>
+
+    <div class="filter-divider"></div>
+
+    <div>
+      <h3 class="sidebar-title">Duración</h3>
+      <div class="filter-group">
+        <label class="filter-checkbox">
+          <input type="checkbox" value="corta"> <span>Hasta 30 min</span>
+        </label>
+        <label class="filter-checkbox">
+          <input type="checkbox" value="media"> <span>30 — 60 min</span>
+        </label>
+        <label class="filter-checkbox">
+          <input type="checkbox" value="larga"> <span>Más de 60 min</span>
+        </label>
+      </div>
+    </div>
+
+    <button class="btn-clear">Limpiar filtros</button>
+  </aside>
+
+  <!-- Contenido -->
+  <main class="content">
+
+    <!-- Header -->
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">Catálogo de <em>Tratamientos</em></h1>
+        <p class="page-subtitle">Gestioná los procedimientos clínicos y estéticos disponibles para las consultas</p>
+      </div>
+      <button class="btn-new" onclick="openModal()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <line x1="12" y1="5" x2="12" y2="19"></line>
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+        </svg>
+        Nuevo Tratamiento
+      </button>
+    </div>
+
+    <!-- Búsqueda -->
+    <div class="search-row">
+      <div class="search-box">
+        <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"></circle>
+          <path d="m21 21-4.35-4.35"></path>
+        </svg>
+        <input type="text" class="search-input" placeholder="Buscar tratamiento por nombre...">
+      </div>
+      <div class="results-count">
+        Mostrando <strong>26</strong> tratamientos
+      </div>
+    </div>
+
+    <!-- Categoría: Clínica General -->
+    <section class="category-section">
+      <div class="category-header">
+        <span class="category-marker clinica"></span>
+        <h2 class="category-name">Clínica General</h2>
+        <span class="category-count">22 procedimientos</span>
+      </div>
+
+      <div class="treatments-grid">
+
+        <!-- RHC -->
+        <article class="treatment-card">
+          <div class="treatment-top">
+            <h3 class="treatment-name">RHC — Revisión Clínica</h3>
+            <span class="badge badge-clinica">Clínica</span>
+          </div>
+          <p class="treatment-desc">Revisión clínica general del paciente. Plantilla básica de interrogatorio sin parámetros específicos.</p>
+          <div class="treatment-meta">
+            <span class="meta-item">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              30 min
+            </span>
+            <span class="meta-price">$ 12.000</span>
+          </div>
+          <div class="treatment-actions">
+            <button class="btn-action">Editar</button>
+            <button class="btn-action primary">Ver plantilla</button>
+          </div>
+        </article>
+
+        <!-- VACUNA NIÑOS -->
+        <article class="treatment-card">
+          <div class="treatment-top">
+            <h3 class="treatment-name">Vacunación — Niños</h3>
+            <span class="badge badge-clinica">Clínica</span>
+          </div>
+          <p class="treatment-desc">HBV, Difteria/Tétano/Tosferina, Poliomielitis, Haemophilus B, Neumococo, Rotavirus, Meningococo B/C-ACW1, Gripe, Sarampión/Rubéola/Parotiditis, Varicela, SARS-CoV-2, HPV, VRS.</p>
+          <div class="treatment-meta">
+            <span class="meta-item">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              20 min
+            </span>
+            <span class="meta-price">$ 8.500</span>
+          </div>
+          <div class="treatment-actions">
+            <button class="btn-action">Editar</button>
+            <button class="btn-action primary">Ver plantilla</button>
+          </div>
+        </article>
+
+        <!-- VACUNA ADULTO -->
+        <article class="treatment-card">
+          <div class="treatment-top">
+            <h3 class="treatment-name">Vacunación — Adultos</h3>
+            <span class="badge badge-clinica">Clínica</span>
+          </div>
+          <p class="treatment-desc">HBV adulto, Antineumocócica (>65 / inmunosuprimidos), Influenza, Triple Viral (CD4 ≥ 200), HPV (15-26 años, 0.5ml IM), Varicela (CD4 ≥ 200).</p>
+          <div class="treatment-meta">
+            <span class="meta-item">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              20 min
+            </span>
+            <span class="meta-price">$ 9.500</span>
+          </div>
+          <div class="treatment-actions">
+            <button class="btn-action">Editar</button>
+            <button class="btn-action primary">Ver plantilla</button>
+          </div>
+        </article>
+
+        <!-- LABORATORIO -->
+        <article class="treatment-card">
+          <div class="treatment-top">
+            <h3 class="treatment-name">Laboratorio Clínico</h3>
+            <span class="badge badge-clinica">Clínica</span>
+          </div>
+          <p class="treatment-desc">Hemograma, coagulación, glucemia/HbA1c, perfil hepático y renal, lípidos, tiroides, vitaminas, marcadores autoinmunes, serologías, hormonas y cultivos.</p>
+          <div class="treatment-meta">
+            <span class="meta-item">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              45 min
+            </span>
+            <span class="meta-price">$ 25.000</span>
+          </div>
+          <div class="treatment-actions">
+            <button class="btn-action">Editar</button>
+            <button class="btn-action primary">Ver plantilla</button>
+          </div>
+        </article>
+
+        <!-- CULTIVOS -->
+        <article class="treatment-card">
+          <div class="treatment-top">
+            <h3 class="treatment-name">Cultivos</h3>
+            <span class="badge badge-clinica">Clínica</span>
+          </div>
+          <p class="treatment-desc">Toma y procesamiento de muestras para cultivos microbiológicos. Plantilla genérica sin parámetros específicos.</p>
+          <div class="treatment-meta">
+            <span class="meta-item">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              25 min
+            </span>
+            <span class="meta-price">$ 14.000</span>
+          </div>
+          <div class="treatment-actions">
+            <button class="btn-action">Editar</button>
+            <button class="btn-action primary">Ver plantilla</button>
+          </div>
+        </article>
+
+        <!-- HORMONAS FEMENINAS -->
+        <article class="treatment-card">
+          <div class="treatment-top">
+            <h3 class="treatment-name">Hormonas Femeninas</h3>
+            <span class="badge badge-clinica">Clínica</span>
+          </div>
+          <p class="treatment-desc">Perfil hormonal completo: pre-menopausia, menopausia (con/sin TRH), DHEA y otros andrógenos adrenales (sin TRH).</p>
+          <div class="treatment-meta">
+            <span class="meta-item">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              40 min
+            </span>
+            <span class="meta-price">$ 22.000</span>
+          </div>
+          <div class="treatment-actions">
+            <button class="btn-action">Editar</button>
+            <button class="btn-action primary">Ver plantilla</button>
+          </div>
+        </article>
+
+        <!-- CD4-CV -->
+        <article class="treatment-card">
+          <div class="treatment-top">
+            <h3 class="treatment-name">CD4 — Carga Viral</h3>
+            <span class="badge badge-clinica">Clínica</span>
+          </div>
+          <p class="treatment-desc">L-CD3, L-CD3/CD8, L-Helper CD3-CD4+CD5, L-Helper CD3-CD4, CD3-CD4-CD8, L-CD45 y carga viral.</p>
+          <div class="treatment-meta">
+            <span class="meta-item">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              30 min
+            </span>
+            <span class="meta-price">$ 28.500</span>
+          </div>
+          <div class="treatment-actions">
+            <button class="btn-action">Editar</button>
+            <button class="btn-action primary">Ver plantilla</button>
+          </div>
+        </article>
+
+        <!-- RADIOGRAFIA -->
+        <article class="treatment-card">
+          <div class="treatment-top">
+            <h3 class="treatment-name">Radiografía</h3>
+            <span class="badge badge-clinica">Clínica</span>
+          </div>
+          <p class="treatment-desc">Estudio radiográfico convencional. Plantilla genérica sin parámetros específicos.</p>
+          <div class="treatment-meta">
+            <span class="meta-item">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              20 min
+            </span>
+            <span class="meta-price">$ 11.000</span>
+          </div>
+          <div class="treatment-actions">
+            <button class="btn-action">Editar</button>
+            <button class="btn-action primary">Ver plantilla</button>
+          </div>
+        </article>
+
+        <!-- ESPIROMETRIA -->
+        <article class="treatment-card">
+          <div class="treatment-top">
+            <h3 class="treatment-name">Espirometría</h3>
+            <span class="badge badge-clinica">Clínica</span>
+          </div>
+          <p class="treatment-desc">Estudio funcional respiratorio. Plantilla genérica sin parámetros específicos.</p>
+          <div class="treatment-meta">
+            <span class="meta-item">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              30 min
+            </span>
+            <span class="meta-price">$ 13.500</span>
+          </div>
+          <div class="treatment-actions">
+            <button class="btn-action">Editar</button>
+            <button class="btn-action primary">Ver plantilla</button>
+          </div>
+        </article>
+
+        <!-- AUDIOMETRIA -->
+        <article class="treatment-card">
+          <div class="treatment-top">
+            <h3 class="treatment-name">Audiometría</h3>
+            <span class="badge badge-clinica">Clínica</span>
+          </div>
+          <p class="treatment-desc">Evaluación de la capacidad auditiva. Plantilla genérica sin parámetros específicos.</p>
+          <div class="treatment-meta">
+            <span class="meta-item">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              25 min
+            </span>
+            <span class="meta-price">$ 12.500</span>
+          </div>
+          <div class="treatment-actions">
+            <button class="btn-action">Editar</button>
+            <button class="btn-action primary">Ver plantilla</button>
+          </div>
+        </article>
+
+        <!-- ECG -->
+        <article class="treatment-card">
+          <div class="treatment-top">
+            <h3 class="treatment-name">ECG — Electrocardiograma</h3>
+            <span class="badge badge-clinica">Clínica</span>
+          </div>
+          <p class="treatment-desc">Registro de la actividad eléctrica del corazón. Plantilla genérica sin parámetros específicos.</p>
+          <div class="treatment-meta">
+            <span class="meta-item">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              15 min
+            </span>
+            <span class="meta-price">$ 9.000</span>
+          </div>
+          <div class="treatment-actions">
+            <button class="btn-action">Editar</button>
+            <button class="btn-action primary">Ver plantilla</button>
+          </div>
+        </article>
+
+        <!-- ECOCARDIO -->
+        <article class="treatment-card">
+          <div class="treatment-top">
+            <h3 class="treatment-name">Ecocardiograma</h3>
+            <span class="badge badge-clinica">Clínica</span>
+          </div>
+          <p class="treatment-desc">Estudio ecográfico del corazón. Plantilla genérica sin parámetros específicos.</p>
+          <div class="treatment-meta">
+            <span class="meta-item">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              35 min
+            </span>
+            <span class="meta-price">$ 18.000</span>
+          </div>
+          <div class="treatment-actions">
+            <button class="btn-action">Editar</button>
+            <button class="btn-action primary">Ver plantilla</button>
+          </div>
+        </article>
+
+        <!-- HOLTER -->
+        <article class="treatment-card">
+          <div class="treatment-top">
+            <h3 class="treatment-name">Holter 24h</h3>
+            <span class="badge badge-clinica">Clínica</span>
+          </div>
+          <p class="treatment-desc">Monitoreo continuo de ritmo cardíaco durante 24 horas. Plantilla genérica sin parámetros específicos.</p>
+          <div class="treatment-meta">
+            <span class="meta-item">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              25 min
+            </span>
+            <span class="meta-price">$ 22.500</span>
+          </div>
+          <div class="treatment-actions">
+            <button class="btn-action">Editar</button>
+            <button class="btn-action primary">Ver plantilla</button>
+          </div>
+        </article>
+
+        <!-- DOPPLER -->
+        <article class="treatment-card">
+          <div class="treatment-top">
+            <h3 class="treatment-name">Doppler</h3>
+            <span class="badge badge-clinica">Clínica</span>
+          </div>
+          <p class="treatment-desc">Estudio ecográfico del flujo sanguíneo. Plantilla genérica sin parámetros específicos.</p>
+          <div class="treatment-meta">
+            <span class="meta-item">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              30 min
+            </span>
+            <span class="meta-price">$ 17.500</span>
+          </div>
+          <div class="treatment-actions">
+            <button class="btn-action">Editar</button>
+            <button class="btn-action primary">Ver plantilla</button>
+          </div>
+        </article>
+
+        <!-- ECOGRAFIA GENERAL -->
+        <article class="treatment-card">
+          <div class="treatment-top">
+            <h3 class="treatment-name">Ecografía General</h3>
+            <span class="badge badge-clinica">Clínica</span>
+          </div>
+          <p class="treatment-desc">Estudio ecográfico abdominal y pélvico. Plantilla genérica sin parámetros específicos.</p>
+          <div class="treatment-meta">
+            <span class="meta-item">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              30 min
+            </span>
+            <span class="meta-price">$ 16.000</span>
+          </div>
+          <div class="treatment-actions">
+            <button class="btn-action">Editar</button>
+            <button class="btn-action primary">Ver plantilla</button>
+          </div>
+        </article>
+
+        <!-- ECOGRAFIA MAMARIA -->
+        <article class="treatment-card">
+          <div class="treatment-top">
+            <h3 class="treatment-name">Ecografía Mamaria</h3>
+            <span class="badge badge-clinica">Clínica</span>
+          </div>
+          <p class="treatment-desc">Estudio ecográfico mamario. Plantilla genérica sin parámetros específicos.</p>
+          <div class="treatment-meta">
+            <span class="meta-item">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              25 min
+            </span>
+            <span class="meta-price">$ 15.500</span>
+          </div>
+          <div class="treatment-actions">
+            <button class="btn-action">Editar</button>
+            <button class="btn-action primary">Ver plantilla</button>
+          </div>
+        </article>
+
+        <!-- VEDA-VCC -->
+        <article class="treatment-card">
+          <div class="treatment-top">
+            <h3 class="treatment-name">VEDA — VCC</h3>
+            <span class="badge badge-clinica">Clínica</span>
+          </div>
+          <p class="treatment-desc">Videoendoscopía digestiva alta y videocolonoscopía. Plantilla genérica sin parámetros específicos.</p>
+          <div class="treatment-meta">
+            <span class="meta-item">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              60 min
+            </span>
+            <span class="meta-price">$ 45.000</span>
+          </div>
+          <div class="treatment-actions">
+            <button class="btn-action">Editar</button>
+            <button class="btn-action primary">Ver plantilla</button>
+          </div>
+        </article>
+
+        <!-- BIOPSIAS -->
+        <article class="treatment-card">
+          <div class="treatment-top">
+            <h3 class="treatment-name">Biopsias</h3>
+            <span class="badge badge-clinica">Clínica</span>
+          </div>
+          <p class="treatment-desc">Toma de muestra tisular para análisis anatomopatológico. Plantilla genérica sin parámetros específicos.</p>
+          <div class="treatment-meta">
+            <span class="meta-item">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              45 min
+            </span>
+            <span class="meta-price">$ 32.000</span>
+          </div>
+          <div class="treatment-actions">
+            <button class="btn-action">Editar</button>
+            <button class="btn-action primary">Ver plantilla</button>
+          </div>
+        </article>
+
+        <!-- PAP -->
+        <article class="treatment-card">
+          <div class="treatment-top">
+            <h3 class="treatment-name">PAP</h3>
+            <span class="badge badge-clinica">Clínica</span>
+          </div>
+          <p class="treatment-desc">Estudio citológico cervical (Papanicolaou). Plantilla genérica sin parámetros específicos.</p>
+          <div class="treatment-meta">
+            <span class="meta-item">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              20 min
+            </span>
+            <span class="meta-price">$ 10.500</span>
+          </div>
+          <div class="treatment-actions">
+            <button class="btn-action">Editar</button>
+            <button class="btn-action primary">Ver plantilla</button>
+          </div>
+        </article>
+
+        <!-- TAC -->
+        <article class="treatment-card">
+          <div class="treatment-top">
+            <h3 class="treatment-name">TAC — Tomografía</h3>
+            <span class="badge badge-clinica">Clínica</span>
+          </div>
+          <p class="treatment-desc">Tomografía axial computarizada. Plantilla genérica sin parámetros específicos.</p>
+          <div class="treatment-meta">
+            <span class="meta-item">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              35 min
+            </span>
+            <span class="meta-price">$ 38.000</span>
+          </div>
+          <div class="treatment-actions">
+            <button class="btn-action">Editar</button>
+            <button class="btn-action primary">Ver plantilla</button>
+          </div>
+        </article>
+
+        <!-- RNM -->
+        <article class="treatment-card">
+          <div class="treatment-top">
+            <h3 class="treatment-name">RNM — Resonancia</h3>
+            <span class="badge badge-clinica">Clínica</span>
+          </div>
+          <p class="treatment-desc">Resonancia nuclear magnética. Plantilla genérica sin parámetros específicos.</p>
+          <div class="treatment-meta">
+            <span class="meta-item">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              50 min
+            </span>
+            <span class="meta-price">$ 52.000</span>
+          </div>
+          <div class="treatment-actions">
+            <button class="btn-action">Editar</button>
+            <button class="btn-action primary">Ver plantilla</button>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- Categoría: Medicina Estética -->
+    <section class="category-section">
+      <div class="category-header">
+        <span class="category-marker estetica"></span>
+        <h2 class="category-name">Medicina Estética</h2>
+        <span class="category-count">4 procedimientos</span>
+      </div>
+
+      <div class="treatments-grid">
+
+        <article class="treatment-card">
+          <div class="treatment-top">
+            <h3 class="treatment-name">Toxina Botulínica</h3>
+            <span class="badge badge-estetica">Estética</span>
+          </div>
+          <p class="treatment-desc">Aplicación de toxina botulínica en zonas dinámicas (frente, entrecejo, patas de gallo). Evaluación previa de fuerza muscular.</p>
+          <div class="treatment-meta">
+            <span class="meta-item">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              30 min
+            </span>
+            <span class="meta-price">$ 65.000</span>
+          </div>
+          <div class="treatment-actions">
+            <button class="btn-action">Editar</button>
+            <button class="btn-action primary">Ver plantilla</button>
+          </div>
+        </article>
+
+        <article class="treatment-card">
+          <div class="treatment-top">
+            <h3 class="treatment-name">Ácido Hialurónico</h3>
+            <span class="badge badge-estetica">Estética</span>
+          </div>
+          <p class="treatment-desc">Relleno con ácido hialurónico en surcos, labios y pómulos. Registro de zona, densidad y volumen aplicado.</p>
+          <div class="treatment-meta">
+            <span class="meta-item">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              45 min
+            </span>
+            <span class="meta-price">$ 95.000</span>
+          </div>
+          <div class="treatment-actions">
+            <button class="btn-action">Editar</button>
+            <button class="btn-action primary">Ver plantilla</button>
+          </div>
+        </article>
+
+        <article class="treatment-card">
+          <div class="treatment-top">
+            <h3 class="treatment-name">Peeling Químico</h3>
+            <span class="badge badge-estetica">Estética</span>
+          </div>
+          <p class="treatment-desc">Exfoliación química superficial o media. Registro de tipo de ácido, concentración y reacción cutánea.</p>
+          <div class="treatment-meta">
+            <span class="meta-item">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              40 min
+            </span>
+            <span class="meta-price">$ 28.000</span>
+          </div>
+          <div class="treatment-actions">
+            <button class="btn-action">Editar</button>
+            <button class="btn-action primary">Ver plantilla</button>
+          </div>
+        </article>
+
+        <article class="treatment-card">
+          <div class="treatment-top">
+            <h3 class="treatment-name">Mesoterapia Facial</h3>
+            <span class="badge badge-estetica">Estética</span>
+          </div>
+          <p class="treatment-desc">Microinyecciones de cócteles vitamínicos y revitalizantes. Registro de fórmula, número de pinchazos y zonas tratadas.</p>
+          <div class="treatment-meta">
+            <span class="meta-item">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              35 min
+            </span>
+            <span class="meta-price">$ 24.500</span>
+          </div>
+          <div class="treatment-actions">
+            <button class="btn-action">Editar</button>
+            <button class="btn-action primary">Ver plantilla</button>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- Modal Nuevo / Editar Tratamiento -->
+<div class="modal-overlay" id="modalTratamiento">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 class="modal-title">Nuevo <em>Tratamiento</em></h2>
+      <button class="modal-close" onclick="closeModal()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+
+    <form>
+      <div class="form-group">
+        <label class="form-label">Nombre del procedimiento</label>
+        <input type="text" class="form-input" placeholder="Ej. Toxina Botulínica - Tercio Superior">
+      </div>
+
+      <div class="form-row" style="margin-top:1rem;">
+        <div class="form-group">
+          <label class="form-label">Categoría</label>
+          <select class="form-select">
+            <option>Medicina Estética</option>
+            <option>Clínica General</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Duración (min)</label>
+          <input type="number" class="form-input" placeholder="30" min="5" step="5">
+        </div>
+      </div>
+
+      <div class="form-group" style="margin-top:1rem;">
+        <label class="form-label">Precio sugerido (ARS)</label>
+        <input type="number" class="form-input" placeholder="0" min="0">
+      </div>
+
+      <div class="form-group" style="margin-top:1rem;">
+        <label class="form-label">Descripción técnica · Plantilla de interrogatorio</label>
+        <textarea class="form-textarea" placeholder="Ej. Antecedentes alérgicos, medicación actual, último tratamiento similar, contraindicaciones, expectativas del paciente..."></textarea>
+        <span class="form-hint">Esta plantilla aparecerá precargada al seleccionar este tratamiento en una nueva consulta.</span>
+      </div>
+
+      <div class="modal-actions">
+        <button type="button" class="btn-secondary" onclick="closeModal()">Cancelar</button>
+        <button type="submit" class="btn-primary">Guardar tratamiento</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+  function openModal() { document.getElementById('modalTratamiento').classList.add('active'); }
+  function closeModal() { document.getElementById('modalTratamiento').classList.remove('active'); }
+  document.getElementById('modalTratamiento').addEventListener('click', (e) => {
+    if (e.target.id === 'modalTratamiento') closeModal();
+  });
+</script>
+
+</body>
+</html>

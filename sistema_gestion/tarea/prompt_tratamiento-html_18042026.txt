@@ -1,0 +1,321 @@
+###PROMPT###
+NECESITO QUE ME GENERES UNA PAGINA EN HTML RESPETANDO LA PALETA DE COLORES:
+
+Color Primario	Rosa Pastel	#FFB6D9
+Color Complementario	Dorado	#D4AF37
+Color de Acento	Negro	#1A1A1A
+Tipografía	Elegante y minimalista	Montserrat (o similar)
+Tono de Marca	Lujo y profesionalismo	—
+
+PODES TOMAR  DE EJEMPLO LOS OTROS ARCHIVOS SUBIDOS.
+
+TENES QUE SEGUIR LA SIGUIENTE HISTORIA  DE USUARIO:
+#HISTORIA USUARIO#
+Descripción: Como Doctora, Quiero gestionar un catálogo de todos los tratamientos que realizo (Clínicos y Estéticos), Para estandarizar los registros en las consultas y facilitar el análisis de los servicios más solicitados.
+
+Criterios de Aceptación:
+
+Criterio 1: El sistema debe permitir crear, editar y categorizar tratamientos diferenciando entre "Medicina Estética" y "Clínica General".
+
+Criterio 2: Cada tratamiento debe incluir campos para: Nombre del procedimiento, Descripción técnica (plantilla de interrogatorio), Duración estimada y Precio/Costo sugerido.
+
+Criterio 3: Los tratamientos guardados aquí deben aparecer como opciones autocompletables al crear una "Nueva Consulta" para ahorrar tiempo de carga.
+#HISTORIA USUARIO#
+
+#IMPORTANTE#
+Trabajar en el archivo sistema_gestion/src/view/pages/tratamiento.html
+#IMPORTANTE#
+###PROMPT###
+
+#####TRATAMIENTOS#####
+RHC
+###DATOS RHC###
+No especifica nada.
+###DATOS RHC###
+
+VACUNA
+####NIÑOS######
+####TIPOS DE VACUNA####
+HBV
+
+"DIFTERIA
+TETANO
+TOSFERINA"
+
+POLIOMIELITIS
+
+"HAEMOPHILUS
+ INFLUENZA 
+TIPO ""b"""
+
+NEUMOCOCO
+
+ROTAVIRUS
+
+MENINGOCOCO B
+
+"MENINGOCOCO
+C y  ACW1"
+
+GRIPE
+"SARAMPION
+RUBEOLA
+PAROTIDITIS"
+
+VARICELA
+
+SARS-CoV-2
+HPV
+"VIRUS RESPIRATORIO
+SINCITIAL"
+####TIPOS DE VACUNA####
+####NIÑOS######
+####ADULTO######
+####TIPOS DE VACUNA####
+"HBV
+adulto"
+
+"ANTINEUMOCOCCICA
+mayores 65 años
+inmumnosuprimidos "
+
+INFLUENZA
+"TRIPLE VIRAL
+con Rcto CD4 ≥ 200"
+
+"HPV
+H y M 15-26 años.
+0.5ml IM."
+
+"VARICELA
+ con Rcto CD4 ≥ 200"
+####TIPOS DE VACUNA####
+####ADULTO######
+
+LABORATORIO
+###DATOS LABORATORIO###
+GLOBULOS BLANCOS 
+C
+N
+E
+L
+HEMATOCRITO
+HEMOGLOBINA
+VCM/HCM
+PLAQUETAS
+Tiempo COAGUL. ( 6-9 min) 
+Tiempo Protrombina (12-14 seg)
+Concentracion Protrombina (70-75%)
+KPTT (28-42 SEG) 
+RIN
+VSG
+PRC
+GLUCEMIA
+HBA1C
+INSULINEMIA
+ACIDO URICO
+UREA
+CREATININA
+LDH
+CPK
+GOT
+GPT
+FAL
+PROTEINAS TOTALES
+ALBUMINA
+AMILASA
+BT
+BD
+BI
+COLESTEROL
+LDL
+HDL
+TRIGLICERIDOS
+PSA
+IGE 
+VITAMINA D3
+TSH
+T3
+T 4 total
+T4 libre
+ATPO
+ANTI R-STH
+PTH-I 
+ANTI TIROGLOBULINA
+TIROGLOBULINA
+FAL OSEA
+CROSS LAPSS
+CALCIO 
+FOSFORO
+MAGNESIO
+ZINC 
+SODIO
+POTASIO
+CLORO
+ORINA COMPLETA
+O. 24H.
+CLEARENCE CRET.
+PROTEINURIA
+MICROALBUMINURIA
+CALCIURIA
+FOSOFRO 
+SODIO 
+POTASIO 
+CLORO 
+MAGNESIO 
+VOLUMEN
+
+VITAMINA B12
+AC. FOLICO 
+FERRITINA
+FERREMIA
+TIBC
+SATURACION
+
+ANTI GLIADINA IG.A
+ANTI TRANSGLUT. IGA
+ANTI ENDOMISIO IGA
+ADGG IG A
+ADGP IG G
+IG A TOTAL
+ANTRI GRANSGLUTAMINSAA IGA 
+FR
+ANTI CCP3
+FAN (HEP2)
+DNA
+SCL
+ANTI - RO
+ANTI - LA
+CH50
+C3
+C4
+
+HVI
+HBs AG
+ANTI CORE HB IG M
+HCV
+VDRL
+TOXOPLAMOSIS
+CHAGAS
+
+LH
+FSH
+ESTRADIOL
+TESTOSTERONA LIBRE
+DHEA
+PROGESTERONA
+PROLACTINA 
+
+COPROPRASITOL. SERIADO
+
+CA 19-9
+NS1 AG
+IG M
+IG G 
+###DATOS LABORATORIO###
+
+CULTIVOS
+###DATOS CULTIVO###
+No se especifica nada.
+###DATOS CULTIVO###
+
+HORMONAS FEMENINAS
+###PRE-MENOSPAUSIA###
+
+###PRE-MENOSPAUSIA###
+###MENOSPAUSIA (SIN TRH)###
+
+###MENOSPAUSIA (SIN TRH)###
+###DHEA OTROS ANDROGENOS ADRENALES (SIN THR)###
+
+###DHEA OTROS ANDROGENOS ADRENALES (SIN THR)###
+###MENOSPAUSIA (CON TRH)###
+
+###MENOSPAUSIA (CON TRH)###
+###PRE Y POST MENOSPAUSIA (mujeres con terapia  de remplazo hormonal-  TRH)###
+
+###PRE Y POST MENOSPAUSIA (mujeres con terapia  de remplazo hormonal-  TRH)###
+
+CD4-CV
+###DATOS CD4-CV###
+
+L-CD3
+L-CD3/CD8
+L-HELPER CD3-CD4+CD5
+L-HELPER CD3-CD4
+CD3-CD4-CD8
+L-CD45
+CARGA VIRAL
+###DATOS CD4-CV###
+
+RADIOGRAFIA
+###DATOS RADIOGRAFIA###
+No se especifica nada.
+###DATOS RADIOGRAFIA###
+
+ESPIROMETRIA
+###DATOS ESPIROMETRIA###
+No se especifica nada.
+###DATOS ESPIROMETRIA###
+
+AUDIOMETRIA
+###DATOS AUDIOMETRIA###
+No se especifica nada.
+###DATOS AUDIOMETRIA###
+
+ECG
+###DATOS ECG###
+No se especifica nada.
+###DATOS ECG###
+
+ECOCARDIO
+###DATOS ECOCARDIO###
+No se especifica nada.
+###DATOS ECOCARDIO###
+
+HOLTER 24H
+###DATOS HOLTER 24H###
+No se especifica nada.
+###DATOS HOLTER 24H###
+
+DOPPLER
+###DATOS DOPLER###
+No se especifica nada.
+###DATOS DOPLER###
+
+ECOGRAFIA General
+###DATOS ECOGRAFIA General###
+No se especifica nada.
+###DATOS ECOGRAFIA General###
+
+ECOGRAFIA MAMARIA
+###DATOS ECOGRAFIA MAMARIA###
+No se especifica nada.
+###DATOS ECOGRAFIA MAMARIA###
+
+VEDA-VCC
+###DATOS  VEDA-VCC###
+No se especifica nada.
+###DATOS  VEDA-VCC###
+
+
+BIOPSIAS
+###DATOS BIOPSIAS###
+No se especifica nada.
+###DATOS BIOPSIAS###
+
+PAP
+###DATOS PAP###
+No se especifica nada.
+###DATOS PAP###
+
+TAC
+###DATOS TAC###
+No se especifica nada.
+###DATOS TAC###
+
+RNM
+###DATOS RNM###
+No se especifica nada.
+###DATOS RNM###
+#####TRATAMIENTOS#####
