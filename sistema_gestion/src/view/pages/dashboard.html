@@ -6,8 +6,8 @@
   <title>Dashboard — Panel Médico</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@0,300;1,300&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../../css/estilos.css">
-  <script src="../../js/dashboard.js" defer></script>
+  <link rel="stylesheet" href="/css/estilos.css">
+  <script src="/js/dashboard.js" defer></script>
 </head>
 <body class="dashboard-page">
 
@@ -20,22 +20,22 @@
     </div>
 
     <nav class="nav-section">
-      <div class="nav-item" >
+      <div class="nav-item active">
         <span class="nav-dot nav-dot-gold"></span>
-        Pacientes
+        Inicio
       </div>
+      <!-- <button class="nav-item" onclick="window.location.href='pacientes.html'">
+        <span class="nav-dot"></span>
+        Pacientes
+      </button> -->
       <button class="nav-item" onclick="window.location.href='turnos.html'">
         <span class="nav-dot"></span>
         Turnos
       </button>
-      <div class="nav-item">
+      <button class="nav-item" onclick="window.location.href='tratamiento.html'">
         <span class="nav-dot"></span>
         Tratamientos
-      </div>
-      <div class="nav-item">
-        <span class="nav-dot"></span>
-        Galería
-      </div>
+      </button>
       <div class="nav-item">
         <span class="nav-dot"></span>
         Estadísticas
