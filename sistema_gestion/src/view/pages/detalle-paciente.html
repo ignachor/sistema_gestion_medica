@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Detalle Paciente — Panel Médico</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@0,300;1,300&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/sistema_gestion/css/estilos.css">
+</head>
+<body class="patient-page">
+
+<div class="patient-topbar">
+  <div class="breadcrumb">
+    <a onclick="window.location.href='index.html'">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+      Pacientes
+    </a>
+    <span class="breadcrumb-sep">/</span>
+    <span class="breadcrumb-current">María González</span>
+  </div>
+  <div class="topbar-actions">
+    <button class="btn-edit">Editar paciente</button>
+    <button class="btn-turno" onclick="window.location.href='nueva-consulta.html'">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      Nuevo turno
+    </button>
+  </div>
+</div>
+
+<div class="patient-layout">
+  <aside class="patient-sidebar">
+    <div class="patient-avatar-wrap">MG</div>
+    <div class="patient-name">María González</div>
+    <span class="patient-type-badge">Paciente Estética</span>
+
+    <div class="info-list">
+      <div class="info-row"><span class="info-key">Edad</span><span class="info-val">34 años</span></div>
+      <div class="info-row"><span class="info-key">DNI</span><span class="info-val">28.441.200</span></div>
+      <div class="info-row"><span class="info-key">Teléfono</span><span class="info-val">+54 11 5821-4490</span></div>
+      <div class="info-row"><span class="info-key">1ª consulta</span><span class="info-val">15 mar 2023</span></div>
+      <div class="info-row"><span class="info-key">Alergias</span><span class="info-val">Ninguna conocida</span></div>
+    </div>
+  </aside>
+
+  <div class="patient-content">
+    <div class="tabs">
+      <button class="tab-btn active">Tratamientos</button>
+      <button class="tab-btn">Antes &amp; Después</button>
+    </div>
+
+    <div class="section-block">
+      <div class="section-header">
+        <span class="section-title">Notas clínicas</span>
+        <button class="btn-link">+ Agregar nota</button>
+      </div>
+      <p class="notas-text">Paciente sin antecedentes patológicos relevantes. Consulta por tratamientos estéticos faciales. Piel sensible, hidratación buena. No consume medicamentos crónicos. Tensión arterial 120/80 en última consulta.</p>
+    </div>
+
+    <div class="section-block">
+      <div class="section-header">
+        <span class="section-title">Galería Antes &amp; Después</span>
+        <button class="btn-link">+ Subir fotos</button>
+      </div>
+      <div class="gallery-grid">
+        <div class="gallery-item">
+          <div class="gallery-photos">
+            <div class="gallery-photo" style="background:#f0e8e0;">
+              <div class="gallery-photo-placeholder">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                <span>Antes</span>
+              </div>
+            </div>
+            <div class="gallery-photo" style="background:#e8f0e0;">
+              <div class="gallery-photo-placeholder">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                <span>Después</span>
+              </div>
+            </div>
+          </div>
+          <div class="gallery-caption">
+            <div class="gallery-caption-title">Relleno de labios</div>
+            <div class="gallery-caption-date">02 abr 2026</div>
+          </div>
+        </div>
+        <div class="gallery-item">
+          <div class="gallery-photos">
+            <div class="gallery-photo" style="background:#ede8f0;">
+              <div class="gallery-photo-placeholder">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                <span>Antes</span>
+              </div>
+            </div>
+            <div class="gallery-photo" style="background:#e8edf0;">
+              <div class="gallery-photo-placeholder">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                <span>Después</span>
+              </div>
+            </div>
+          </div>
+          <div class="gallery-caption">
+            <div class="gallery-caption-title">Botox zona T</div>
+            <div class="gallery-caption-date">15 ene 2026</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-block">
+      <div class="historial-header">
+        <span class="section-title">Historial de tratamientos</span>
+        <span class="historial-count">6 tratamientos</span>
+      </div>
+      <div style="margin-top:0.85rem;">
+        <div class="historial-item">
+          <div class="historial-dot"></div>
+          <div style="flex:1;">
+            <div class="historial-name">Relleno de labios · Ácido hialurónico 1ml</div>
+            <div class="historial-meta">02 abril 2026 · Dra. Rossi</div>
+          </div>
+          <span class="historial-estado">Completado</span>
+        </div>
+        <div class="historial-item">
+          <div class="historial-dot" style="background:var(--rosa);"></div>
+          <div style="flex:1;">
+            <div class="historial-name">Botox preventivo · Zona T</div>
+            <div class="historial-meta">15 enero 2026 · Dra. Rossi</div>
+          </div>
+          <span class="historial-estado">Completado</span>
+        </div>
+        <div class="historial-item">
+          <div class="historial-dot" style="background:var(--gris-light);"></div>
+          <div style="flex:1;">
+            <div class="historial-name">Peeling químico · Vitamina C</div>
+            <div class="historial-meta">03 oct 2025 · Dra. Rossi</div>
+          </div>
+          <span class="historial-estado">Completado</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-block">
+      <div class="section-header">
+        <div class="historia-header">
+          <svg class="historia-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="1"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>
+          <span class="section-title">Historia Clínica</span>
+        </div>
+        <button class="btn-turno" onclick="window.location.href='nueva-consulta.html'" style="font-size:0.72rem;padding:0.4rem 0.9rem;">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Nueva Consulta
+        </button>
+      </div>
+
+      <div style="margin-top:1rem;">
+        <div class="consulta-entry">
+          <div class="consulta-date-bar">
+            <div class="consulta-date">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+              15 Mar 2024 – Clínica
+            </div>
+            <span class="consulta-dx">Acné rosáceo</span>
+          </div>
+          <div class="consulta-body">
+            <div class="consulta-field"><strong>Motivo:</strong> Brote de acné</div>
+            <div class="consulta-field"><strong>Diagnóstico:</strong> Dermatitis alérgica</div>
+            <div class="consulta-field"><strong>Tratamiento:</strong> Limpieza + protector</div>
+            <div class="consulta-photos">
+              <div class="consulta-photo" style="background:#e8e0d8;display:flex;align-items:center;justify-content:center;color:var(--gris-light);">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              </div>
+              <div class="consulta-photo" style="background:#dde8e0;display:flex;align-items:center;justify-content:center;color:var(--gris-light);">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              </div>
+              <div class="consulta-photo" style="background:#e8dde8;display:flex;align-items:center;justify-content:center;color:var(--gris-light);">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="consulta-entry">
+          <div class="consulta-date-bar">
+            <div class="consulta-date">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+              01 Feb 2024 – Estética
+            </div>
+            <span class="consulta-dx consulta-dx-dorado">Botox preventivo</span>
+          </div>
+          <div class="consulta-body">
+            <div class="consulta-field"><strong>Motivo:</strong> Prevención de arrugas</div>
+            <div class="consulta-field"><strong>Plan:</strong> Botox zona frontal y glabela</div>
+            <div class="consulta-field"><strong>Próxima:</strong> 15 Mar 2024</div>
+            <div class="consulta-photos">
+              <div class="consulta-photo" style="background:#e0e0e8;display:flex;align-items:center;justify-content:center;color:var(--gris-light);">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              </div>
+              <div class="consulta-photo" style="background:#e8e0e0;display:flex;align-items:center;justify-content:center;color:var(--gris-light);">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

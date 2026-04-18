@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gestión de Pacientes — Panel Médico</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@0,300;1,300&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/sistema_gestion/css/pacientes.css">
+</head>
+<body class="patients-page">
+
+<div class="patients-topbar">
+  <div class="breadcrumb">
+    <a onclick="window.location.href='index.html'">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+      Dashboard
+    </a>
+    <span class="breadcrumb-sep">/</span>
+    <span class="breadcrumb-current">Pacientes</span>
+  </div>
+</div>
+
+<div class="patients-layout">
+  <aside class="patients-sidebar">
+    <div class="sidebar-section">
+      <h3 class="sidebar-title">Filtros</h3>
+
+      <!-- Filtro por Categoría -->
+      <div class="filter-group">
+        <label class="filter-label">Categoría</label>
+        <div class="filter-options">
+          <label class="filter-checkbox">
+            <input type="checkbox" name="categoria" value="clinica">
+            <span class="checkbox-custom"></span>
+            <span class="checkbox-label">Clínica</span>
+          </label>
+          <label class="filter-checkbox">
+            <input type="checkbox" name="categoria" value="estetica">
+            <span class="checkbox-custom"></span>
+            <span class="checkbox-label">Estética</span>
+          </label>
+          <label class="filter-checkbox">
+            <input type="checkbox" name="categoria" value="ambas">
+            <span class="checkbox-custom"></span>
+            <span class="checkbox-label">Ambas</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Separador -->
+      <div class="filter-divider"></div>
+
+      <!-- Filtro por Orden Alfabético -->
+      <div class="filter-group">
+        <label class="filter-label">Ordenar por</label>
+        <select class="filter-select" name="ordenar">
+          <option value="az">A - Z (Nombre)</option>
+          <option value="za">Z - A (Nombre)</option>
+          <option value="reciente">Más reciente</option>
+          <option value="antiguo">Más antiguo</option>
+        </select>
+      </div>
+
+      <!-- Botón para limpiar filtros -->
+      <button class="btn-clear-filters">Limpiar filtros</button>
+    </aside>
+
+    <div class="patients-content">
+      <!-- Buscador -->
+      <div class="search-container">
+        <div class="search-box">
+          <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"></circle>
+            <path d="m21 21-4.35-4.35"></path>
+          </svg>
+          <input
+            type="text"
+            class="search-input"
+            placeholder="Buscar por Nombre, Apellido o DNI..."
+            name="busqueda"
+          >
+          <button class="btn-search-clear" style="display:none;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+        <div class="search-results-count">
+          <span class="results-text">Mostrando <strong id="results-count">12</strong> pacientes</span>
+        </div>
+      </div>
+
+      <!-- Listado de Pacientes -->
+      <div class="patients-list">
+
+        <!-- Paciente Item -->
+        <div class="patient-card">
+          <div class="patient-card-header">
+            <div class="patient-avatar">MG</div>
+            <div class="patient-info">
+              <h4 class="patient-name">María González</h4>
+              <p class="patient-contact">28.441.200 · +54 11 5821-4490</p>
+            </div>
+            <span class="patient-badge patient-badge-estetica">Estética</span>
+          </div>
+          <div class="patient-card-footer">
+            <span class="patient-meta">Primera consulta: 15 mar 2023</span>
+            <a href="detalle-paciente.html" class="btn-view-patient">Ver ficha</a>
+          </div>
+        </div>
+
+        <!-- Paciente Item -->
+        <div class="patient-card">
+          <div class="patient-card-header">
+            <div class="patient-avatar">JR</div>
+            <div class="patient-info">
+              <h4 class="patient-name">Juan Rodríguez</h4>
+              <p class="patient-contact">27.895.123 · +54 11 6234-5678</p>
+            </div>
+            <span class="patient-badge patient-badge-clinica">Clínica</span>
+          </div>
+          <div class="patient-card-footer">
+            <span class="patient-meta">Primera consulta: 08 ene 2024</span>
+            <a href="detalle-paciente.html" class="btn-view-patient">Ver ficha</a>
+          </div>
+        </div>
+
+        <!-- Paciente Item -->
+        <div class="patient-card">
+          <div class="patient-card-header">
+            <div class="patient-avatar">SL</div>
+            <div class="patient-info">
+              <h4 class="patient-name">Sofía López</h4>
+              <p class="patient-contact">29.112.445 · +54 11 7456-8901</p>
+            </div>
+            <span class="patient-badge patient-badge-ambas">Ambas</span>
+          </div>
+          <div class="patient-card-footer">
+            <span class="patient-meta">Primera consulta: 22 feb 2023</span>
+            <a href="detalle-paciente.html" class="btn-view-patient">Ver ficha</a>
+          </div>
+        </div>
+
+        <!-- Paciente Item -->
+        <div class="patient-card">
+          <div class="patient-card-header">
+            <div class="patient-avatar">AC</div>
+            <div class="patient-info">
+              <h4 class="patient-name">Ana Caruso</h4>
+              <p class="patient-contact">28.667.789 · +54 11 5123-4567</p>
+            </div>
+            <span class="patient-badge patient-badge-estetica">Estética</span>
+          </div>
+          <div class="patient-card-footer">
+            <span class="patient-meta">Primera consulta: 10 dic 2023</span>
+            <a href="detalle-paciente.html" class="btn-view-patient">Ver ficha</a>
+          </div>
+        </div>
+
+        <!-- Paciente Item -->
+        <div class="patient-card">
+          <div class="patient-card-header">
+            <div class="patient-avatar">PP</div>
+            <div class="patient-info">
+              <h4 class="patient-name">Pablo Pérez</h4>
+              <p class="patient-contact">26.543.210 · +54 11 8765-4321</p>
+            </div>
+            <span class="patient-badge patient-badge-clinica">Clínica</span>
+          </div>
+          <div class="patient-card-footer">
+            <span class="patient-meta">Primera consulta: 05 nov 2022</span>
+            <a href="detalle-paciente.html" class="btn-view-patient">Ver ficha</a>
+          </div>
+        </div>
+
+        <!-- Paciente Item -->
+        <div class="patient-card">
+          <div class="patient-card-header">
+            <div class="patient-avatar">LM</div>
+            <div class="patient-info">
+              <h4 class="patient-name">Laura Martínez</h4>
+              <p class="patient-contact">28.334.556 · +54 11 9012-3456</p>
+            </div>
+            <span class="patient-badge patient-badge-ambas">Ambas</span>
+          </div>
+          <div class="patient-card-footer">
+            <span class="patient-meta">Primera consulta: 30 sep 2023</span>
+            <a href="detalle-paciente.html" class="btn-view-patient">Ver ficha</a>
+          </div>
+        </div>
+
+        <!-- Paciente Item -->
+        <div class="patient-card">
+          <div class="patient-card-header">
+            <div class="patient-avatar">CF</div>
+            <div class="patient-info">
+              <h4 class="patient-name">Carlos Fernández</h4>
+              <p class="patient-contact">27.123.456 · +54 11 4567-8901</p>
+            </div>
+            <span class="patient-badge patient-badge-clinica">Clínica</span>
+          </div>
+          <div class="patient-card-footer">
+            <span class="patient-meta">Primera consulta: 14 ago 2023</span>
+            <a href="detalle-paciente.html" class="btn-view-patient">Ver ficha</a>
+          </div>
+        </div>
+
+        <!-- Paciente Item -->
+        <div class="patient-card">
+          <div class="patient-card-header">
+            <div class="patient-avatar">RG</div>
+            <div class="patient-info">
+              <h4 class="patient-name">Rosario García</h4>
+              <p class="patient-contact">28.998.765 · +54 11 2345-6789</p>
+            </div>
+            <span class="patient-badge patient-badge-estetica">Estética</span>
+          </div>
+          <div class="patient-card-footer">
+            <span class="patient-meta">Primera consulta: 20 jul 2024</span>
+            <a href="detalle-paciente.html" class="btn-view-patient">Ver ficha</a>
+          </div>
+        </div>
+
+        <!-- Paciente Item -->
+        <div class="patient-card">
+          <div class="patient-card-header">
+            <div class="patient-avatar">MS</div>
+            <div class="patient-info">
+              <h4 class="patient-name">Marcela Sánchez</h4>
+              <p class="patient-contact">29.555.444 · +54 11 3456-7890</p>
+            </div>
+            <span class="patient-badge patient-badge-ambas">Ambas</span>
+          </div>
+          <div class="patient-card-footer">
+            <span class="patient-meta">Primera consulta: 11 jun 2023</span>
+            <a href="detalle-paciente.html" class="btn-view-patient">Ver ficha</a>
+          </div>
+        </div>
+
+        <!-- Paciente Item -->
+        <div class="patient-card">
+          <div class="patient-card-header">
+            <div class="patient-avatar">DR</div>
+            <div class="patient-info">
+              <h4 class="patient-name">Diego Ramos</h4>
+              <p class="patient-contact">26.789.012 · +54 11 6789-0123</p>
+            </div>
+            <span class="patient-badge patient-badge-clinica">Clínica</span>
+          </div>
+          <div class="patient-card-footer">
+            <span class="patient-meta">Primera consulta: 25 may 2024</span>
+            <a href="detalle-paciente.html" class="btn-view-patient">Ver ficha</a>
+          </div>
+        </div>
+
+        <!-- Paciente Item -->
+        <div class="patient-card">
+          <div class="patient-card-header">
+            <div class="patient-avatar">VT</div>
+            <div class="patient-info">
+              <h4 class="patient-name">Valeria Torres</h4>
+              <p class="patient-contact">28.456.789 · +54 11 8901-2345</p>
+            </div>
+            <span class="patient-badge patient-badge-estetica">Estética</span>
+          </div>
+          <div class="patient-card-footer">
+            <span class="patient-meta">Primera consulta: 17 apr 2024</span>
+            <a href="detalle-paciente.html" class="btn-view-patient">Ver ficha</a>
+          </div>
+        </div>
+
+        <!-- Paciente Item -->
+        <div class="patient-card">
+          <div class="patient-card-header">
+            <div class="patient-avatar">ER</div>
+            <div class="patient-info">
+              <h4 class="patient-name">Eduardo Ramírez</h4>
+              <p class="patient-contact">27.234.567 · +54 11 1234-5678</p>
+            </div>
+            <span class="patient-badge patient-badge-ambas">Ambas</span>
+          </div>
+          <div class="patient-card-footer">
+            <span class="patient-meta">Primera consulta: 03 mar 2023</span>
+            <a href="detalle-paciente.html" class="btn-view-patient">Ver ficha</a>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Sin resultados -->
+      <div class="no-results" style="display:none;">
+        <div class="no-results-icon">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <circle cx="11" cy="11" r="8"></circle>
+            <path d="m21 21-4.35-4.35"></path>
+          </svg>
+        </div>
+        <h3 class="no-results-title">No se encontraron pacientes</h3>
+        <p class="no-results-text">Intenta con otros términos de búsqueda o ajusta los filtros</p>
+      </div>
+
+    </div>
+  </div>
+
+</body>
+</html>

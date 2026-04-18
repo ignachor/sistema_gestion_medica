@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Turnos — Panel Médico</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@0,300;1,300&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/sistema_gestion/css/estilos.css">
+  <script src="../../../js/calendario.js" defer></script>
+</head>
+<body class="dashboard-page">
+
+<div class="dashboard-container">
+
+  <!-- ── SIDEBAR ── -->
+  <aside class="sidebar">
+    <div class="sidebar-top">
+      <div class="sidebar-avatar">DN</div>
+      <div class="sidebar-name">Dra. Nancy</div>
+      <div class="sidebar-role">Panel médico</div>
+    </div>
+
+    <nav class="nav-section">
+      <div class="nav-item" onclick="window.location.href='pacientes.html'">
+        <span class="nav-dot"></span>
+        Pacientes
+      </div>
+      <div class="nav-item active">
+        <span class="nav-dot nav-dot-gold"></span>
+        Turnos
+      </div>
+      <div class="nav-item">
+        <span class="nav-dot"></span>
+        Tratamientos
+      </div>
+      <div class="nav-item">
+        <span class="nav-dot"></span>
+        Galería
+      </div>
+      <div class="nav-item">
+        <span class="nav-dot"></span>
+        Estadísticas
+      </div>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="sidebar-user">
+        <div class="sidebar-user-avatar">A</div>
+        <span class="sidebar-user-name">Administrador</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ── MAIN ── -->
+  <main class="main" style="display:flex;flex-direction:column;overflow:hidden;">
+
+    <!-- Topbar del calendario -->
+    <div class="cal-topbar">
+      <div class="cal-topbar-left">
+        <div class="cal-nav">
+          <button class="cal-nav-btn" id="btnAnterior" title="Anterior">&#8249;</button>
+          <button class="btn-hoy" id="btnHoy">Hoy</button>
+          <button class="cal-nav-btn" id="btnSiguiente" title="Siguiente">&#8250;</button>
+        </div>
+        <h2 class="cal-title" id="calTitle"></h2>
+      </div>
+
+      <div class="cal-topbar-right">
+        <div class="cal-legend">
+          <span class="cal-legend-item">
+            <span class="cal-legend-dot legend-estetica"></span>Estética
+          </span>
+          <span class="cal-legend-item">
+            <span class="cal-legend-dot legend-clinica"></span>Clínica
+          </span>
+          <span class="cal-legend-item">
+            <span class="cal-legend-dot legend-bloqueado"></span>Bloqueado
+          </span>
+        </div>
+        <div class="cal-view-toggle">
+          <button class="cal-view-btn" id="btnVistaDia" data-vista="dia">Día</button>
+          <button class="cal-view-btn active" id="btnVistaSemana" data-vista="semana">Semana</button>
+        </div>
+        <button class="btn-nuevo-turno" id="btnNuevoTurno">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+          </svg>
+          Nuevo turno
+        </button>
+      </div>
+    </div>
+
+    <!-- Calendario -->
+    <div class="cal-body" id="calBody"></div>
+
+  </main>
+</div>
+
+<!-- ── MODAL ── -->
+<div class="cal-modal-overlay" id="modalOverlay">
+  <div class="cal-modal">
+    <div class="cal-modal-header">
+      <span class="cal-modal-title" id="modalTitle">Turno</span>
+      <button class="cal-modal-close" onclick="cerrarModal()">&#215;</button>
+    </div>
+    <div class="cal-modal-body" id="modalBody"></div>
+    <div class="cal-modal-footer" id="modalFooter"></div>
+  </div>
+</div>
+
+</body>
+</html>

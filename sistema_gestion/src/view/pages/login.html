@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Iniciar Sesión — Panel Médico</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@0,300;1,300&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/sistema_gestion/css/estilos.css">
+</head>
+<body class="login-page">
+
+<div class="login-container">
+  <div class="left">
+    <div class="logo-wrap">
+      <span class="logo-initials">NO</span>
+    </div>
+    <p class="left-name">Dra. Nancy Ostrizniuk</p>
+    <p class="left-sub">Estética &amp; Clínica</p>
+    <div class="left-divider"></div>
+    <p class="left-desc">Sistema de gestión integral de pacientes. Acceso exclusivo para profesionales autorizados.</p>
+    <div class="feature-list">
+      <div class="feature-item"><span class="feature-dot"></span>Gestión de pacientes clínicos y estéticos</div>
+      <div class="feature-item"><span class="feature-dot"></span>Galería de fotos antes y después</div>
+      <div class="feature-item"><span class="feature-dot"></span>Historial de tratamientos y turnos</div>
+    </div>
+  </div>
+
+  <div class="right">
+    <div class="form-wrap">
+      <h1 class="form-title">Bienvenida</h1>
+      <p class="form-sub">Ingresá tus credenciales para acceder al sistema.</p>
+
+      <div class="field">
+        <label for="email">Correo electrónico</label>
+        <div class="input-wrap">
+          <input type="email" id="email" placeholder="dra.nancy@clinica.com">
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="field-row">
+          <label for="pass">Contraseña</label>
+          <a href="#">¿Olvidaste tu contraseña?</a>
+        </div>
+        <div class="input-wrap">
+          <input type="password" id="pass" value="••••••••">
+          <button class="eye-btn" type="button" id="togglePass">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <button class="btn-login" onclick="window.location.href='index.html'">Iniciar sesión</button>
+
+      <p class="form-footer">Sistema seguro · Acceso solo para personal autorizado</p>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.getElementById('togglePass').addEventListener('click', function() {
+    const inp = document.getElementById('pass');
+    inp.type = inp.type === 'password' ? 'text' : 'password';
+  });
+</script>
+</body>
+</html>
