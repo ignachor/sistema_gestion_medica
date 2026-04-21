@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Estadísticas — Panel Médico</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Cormorant+Garamond:ital,wght@0,300;1,300&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../css/estilos.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+  <style>
+    /* ══════════════════════════════════════════
+       ESTADÍSTICAS — hoja de estilos autosuficiente
+       ══════════════════════════════════════════ */
+    :root {
+      --rosa: #FFB6D9;
+      --rosa-light: #FFD6EC;
+      --rosa-pale: #FFF0F7;
+      --rosa-mid: #F590C4;
+      --dorado: #D4AF37;
+      --dorado-light: #E8D080;
+      --dorado-pale: #FBF6E3;
+      --verde: #4B8F5E;
+      --verde-pale: #EAF5EC;
+      --negro: #1A1A1A;
+      --negro-mid: #2E2E2E;
+      --gris: #6B6B6B;
+      --gris-light: #A8A8A8;
+      --gris-bg: #F7F6F3;
+      --blanco: #FFFFFF;
+      --crema: #FDFAF6;
+      --borde: #F0EBE3;
+      --borde-gris: #E8E4DF;
+      --mont: 'Montserrat', sans-serif;
+      --serif: 'Cormorant Garamond', Georgia, serif;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; font-family: var(--mont); color: var(--negro); }
+
+    body.estadisticas-page { background: var(--gris-bg); }
+    body.estadisticas-page .main { overflow-y: auto; min-height: 100vh; }
+
+    /* ─ Topbar ─ */
+    .topbar {
+      background: var(--blanco);
+      border-bottom: 1px solid var(--borde);
+      padding: 0.85rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+    .breadcrumb { display: flex; align-items: center; gap: 0.5rem; font-size: 0.8rem; }
+    .breadcrumb a {
+      color: var(--gris);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      transition: color 0.2s;
+    }
+    .breadcrumb a:hover { color: var(--negro); }
+    .breadcrumb-sep { color: var(--gris-light); }
+    .breadcrumb-current { color: var(--negro); font-weight: 500; }
+
+    /* ─ Indicador de sincronización ─ */
+    .sync-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      font-size: 0.72rem;
+      color: var(--verde);
+      background: var(--verde-pale);
+      border: 1px solid rgba(75, 143, 94, 0.25);
+      border-radius: 99px;
+      padding: 0.3rem 0.75rem;
+      letter-spacing: 0.02em;
+      font-weight: 500;
+    }
+    .sync-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--verde);
+      animation: pulse-sync 2.4s ease-in-out infinite;
+    }
+    @keyframes pulse-sync {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50%       { opacity: 0.45; transform: scale(0.78); }
+    }
+
+    /* ─ Contenido ─ */
+    .content { padding: 1.75rem 2rem; }
+
+    .page-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1.1rem;
+      border-bottom: 1px solid var(--borde);
+      flex-wrap: wrap;
+    }
+    .page-title {
+      font-family: var(--serif);
+      font-size: 2.1rem;
+      font-weight: 300;
+      color: var(--negro);
+      letter-spacing: 0.02em;
+    }
+    .page-title em { color: var(--dorado); font-style: italic; }
+    .page-subtitle {
+      font-size: 0.82rem;
+      color: var(--gris);
+      margin-top: 0.3rem;
+      letter-spacing: 0.02em;
+    }
+
+    /* ─ Filtros de período ─ */
+    .period-row {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+    .period-label {
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--gris);
+      margin-right: 0.25rem;
+    }
+    .period-btn {
+      padding: 0.5rem 1rem;
+      border: 1px solid var(--borde-gris);
+      background: var(--blanco);
+      color: var(--negro-mid);
+      border-radius: 99px;
+      font-family: var(--mont);
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.03em;
+      cursor: pointer;
+      transition: all 0.22s;
+    }
+    .period-btn:hover { border-color: var(--dorado); color: var(--negro); }
+    .period-btn.active {
+      background: var(--negro);
+      color: var(--blanco);
+      border-color: var(--negro);
+    }
+
+    /* ─ KPI Cards ─ */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.75rem;
+    }
+    .kpi-card {
+      background: var(--blanco);
+      border: 1px solid var(--borde);
+      border-radius: 10px;
+      padding: 1.1rem 1.2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+      transition: box-shadow 0.2s;
+    }
+    .kpi-card:hover { box-shadow: 0 4px 14px rgba(0,0,0,0.06); }
+    .kpi-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 0.2rem;
+    }
+    .kpi-icon.rosa  { background: var(--rosa-pale); color: var(--rosa-mid); }
+    .kpi-icon.dorado { background: var(--dorado-pale); color: var(--dorado); }
+    .kpi-icon.verde { background: var(--verde-pale); color: var(--verde); }
+    .kpi-icon.gris  { background: var(--gris-bg); color: var(--gris); }
+    .kpi-value {
+      font-size: 1.85rem;
+      font-weight: 600;
+      color: var(--negro);
+      line-height: 1;
+    }
+    .kpi-value.dorado { color: var(--dorado); }
+    .kpi-label {
+      font-size: 0.73rem;
+      color: var(--gris);
+      letter-spacing: 0.02em;
+    }
+    .kpi-trend {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      font-size: 0.68rem;
+      font-weight: 600;
+      padding: 0.18rem 0.5rem;
+      border-radius: 99px;
+      margin-top: 0.15rem;
+      width: fit-content;
+    }
+    .kpi-trend.up   { background: var(--verde-pale); color: var(--verde); }
+    .kpi-trend.down { background: #FCE4EA; color: #D8264A; }
+
+    /* ─ Sección principal: gráfico + drill-down ─ */
+    .charts-layout {
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 1.25rem;
+      align-items: start;
+    }
+
+    .chart-card {
+      background: var(--blanco);
+      border: 1px solid var(--borde);
+      border-radius: 12px;
+      padding: 1.4rem 1.5rem;
+    }
+    .chart-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 0.75rem;
+      margin-bottom: 1.25rem;
+    }
+    .chart-title {
+      font-family: var(--serif);
+      font-size: 1.3rem;
+      font-weight: 300;
+      color: var(--negro);
+    }
+    .chart-title em { color: var(--dorado); font-style: italic; }
+    .chart-subtitle {
+      font-size: 0.73rem;
+      color: var(--gris);
+      margin-top: 0.2rem;
+    }
+    .chart-hint {
+      font-size: 0.68rem;
+      color: var(--gris-light);
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      white-space: nowrap;
+      margin-top: 0.15rem;
+    }
+    .chart-canvas-wrap {
+      position: relative;
+      width: 100%;
+      height: 320px;
+    }
+
+    /* ─ Panel drill-down ─ */
+    .drilldown-card {
+      background: var(--blanco);
+      border: 1px solid var(--borde);
+      border-radius: 12px;
+      overflow: hidden;
+      transition: box-shadow 0.25s;
+    }
+    .drilldown-card.highlighted {
+      border-color: var(--dorado-light);
+      box-shadow: 0 4px 18px rgba(212,175,55,0.12);
+    }
+    .drilldown-header {
+      padding: 1.1rem 1.2rem 0.9rem;
+      border-bottom: 1px solid var(--borde);
+      background: var(--dorado-pale);
+    }
+    .drilldown-pretitle {
+      font-size: 0.66rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--dorado);
+      margin-bottom: 0.35rem;
+    }
+    .drilldown-name {
+      font-family: var(--serif);
+      font-size: 1.15rem;
+      font-weight: 300;
+      color: var(--negro);
+    }
+    .drilldown-count {
+      font-size: 0.75rem;
+      color: var(--gris);
+      margin-top: 0.25rem;
+    }
+    .drilldown-count strong { color: var(--negro); }
+
+    .drilldown-body { padding: 0.9rem 1.2rem; }
+    .drilldown-section-title {
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--gris);
+      margin-bottom: 0.7rem;
+    }
+    .insumo-list { display: flex; flex-direction: column; gap: 0.55rem; }
+    .insumo-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      padding: 0.55rem 0.7rem;
+      border: 1px solid var(--borde);
+      border-radius: 8px;
+      background: var(--crema);
+      transition: border-color 0.2s;
+    }
+    .insumo-item:hover { border-color: var(--dorado-light); }
+    .insumo-left { display: flex; flex-direction: column; gap: 0.1rem; }
+    .insumo-name { font-size: 0.8rem; font-weight: 500; color: var(--negro-mid); }
+    .insumo-sku  { font-size: 0.67rem; color: var(--gris-light); }
+    .insumo-stock-badge {
+      font-size: 0.65rem;
+      font-weight: 600;
+      padding: 0.2rem 0.5rem;
+      border-radius: 99px;
+      white-space: nowrap;
+    }
+    .stock-ok   { background: var(--verde-pale); color: var(--verde); }
+    .stock-low  { background: #FCEFE0; color: #E68A3C; }
+    .stock-crit { background: #FCE4EA; color: #D8264A; }
+
+    .drilldown-default {
+      padding: 2rem 1.2rem;
+      text-align: center;
+      color: var(--gris-light);
+    }
+    .drilldown-default svg { opacity: 0.35; margin-bottom: 0.75rem; }
+    .drilldown-default p {
+      font-size: 0.78rem;
+      line-height: 1.5;
+      color: var(--gris);
+    }
+
+    .btn-stock-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      margin-top: 1rem;
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--dorado);
+      text-decoration: none;
+      letter-spacing: 0.03em;
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.2s;
+    }
+    .btn-stock-link:hover { border-color: var(--dorado); }
+
+    /* ─ Ranking lista ─ */
+    .ranking-card {
+      background: var(--blanco);
+      border: 1px solid var(--borde);
+      border-radius: 12px;
+      padding: 1.4rem 1.5rem;
+      margin-top: 1.25rem;
+    }
+    .ranking-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.1rem;
+    }
+    .ranking-title {
+      font-family: var(--serif);
+      font-size: 1.15rem;
+      font-weight: 300;
+      color: var(--negro);
+    }
+    .ranking-title em { color: var(--rosa-mid); font-style: italic; }
+    .ranking-list { display: flex; flex-direction: column; gap: 0.6rem; }
+    .ranking-row {
+      display: grid;
+      grid-template-columns: 22px 1fr auto;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .ranking-pos {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--gris-light);
+      text-align: center;
+    }
+    .ranking-pos.gold   { color: var(--dorado); }
+    .ranking-pos.silver { color: #9E9E9E; }
+    .ranking-pos.bronze { color: #C07D4A; }
+    .ranking-bar-wrap { position: relative; }
+    .ranking-bar-label {
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--negro-mid);
+      margin-bottom: 0.22rem;
+    }
+    .ranking-bar-track {
+      height: 6px;
+      border-radius: 99px;
+      background: var(--gris-bg);
+      overflow: hidden;
+    }
+    .ranking-bar-fill {
+      height: 100%;
+      border-radius: 99px;
+      transition: width 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .ranking-count {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--negro);
+      white-space: nowrap;
+    }
+    .ranking-count span {
+      font-size: 0.65rem;
+      font-weight: 400;
+      color: var(--gris);
+    }
+
+    /* ─ Responsive ─ */
+    @media (max-width: 1100px) {
+      .charts-layout { grid-template-columns: 1fr; }
+      .drilldown-card { order: -1; }
+    }
+    @media (max-width: 700px) {
+      .kpi-grid { grid-template-columns: 1fr 1fr; }
+      .content { padding: 1.1rem 1rem; }
+      .topbar { padding: 0.75rem 1rem; }
+      .page-title { font-size: 1.7rem; }
+      .chart-canvas-wrap { height: 240px; }
+      .period-row { gap: 0.4rem; }
+    }
+    @media (max-width: 440px) {
+      .kpi-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body class="estadisticas-page dashboard-page">
+
+<div class="dashboard-container">
+
+  <!-- ── SIDEBAR ── -->
+  <aside class="sidebar">
+    <div class="sidebar-top">
+      <div class="sidebar-avatar">DN</div>
+      <div class="sidebar-name">Dra. Nancy</div>
+      <div class="sidebar-role">Panel médico</div>
+    </div>
+
+    <nav class="nav-section">
+      <button class="nav-item" onclick="window.location.href='dashboard.html'">
+        <span class="nav-dot"></span>
+        Inicio
+      </button>
+      <button class="nav-item" onclick="window.location.href='turnos.html'">
+        <span class="nav-dot"></span>
+        Turnos
+      </button>
+      <button class="nav-item" onclick="window.location.href='tratamiento.html'">
+        <span class="nav-dot"></span>
+        Tratamientos
+      </button>
+      <button class="nav-item" onclick="window.location.href='stock.html'">
+        <span class="nav-dot"></span>
+        Stock
+      </button>
+      <div class="nav-item active">
+        <span class="nav-dot nav-dot-gold"></span>
+        Estadísticas
+      </div>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="sidebar-user">
+        <div class="sidebar-user-avatar">A</div>
+        <span class="sidebar-user-name">Administrador</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ── MAIN ── -->
+  <main class="main">
+
+    <!-- Topbar -->
+    <div class="topbar">
+      <nav class="breadcrumb">
+        <a href="dashboard.html">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          Inicio
+        </a>
+        <span class="breadcrumb-sep">/</span>
+        <span class="breadcrumb-current">Estadísticas</span>
+      </nav>
+      <div class="sync-badge" id="syncBadge">
+        <span class="sync-dot"></span>
+        Sincronizado · <span id="syncTime">hace 2 min</span>
+      </div>
+    </div>
+
+    <div class="content">
+
+      <!-- Page header -->
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Estadísticas <em>Estéticas</em></h1>
+          <p class="page-subtitle">Top 5 tratamientos más solicitados · Decisiones de marketing y compras de stock</p>
+        </div>
+      </div>
+
+      <!-- Filtros de período -->
+      <div class="period-row">
+        <span class="period-label">Período</span>
+        <button class="period-btn active" data-period="mes" onclick="setPeriod(this, 'mes')">Mes actual</button>
+        <button class="period-btn" data-period="trimestre" onclick="setPeriod(this, 'trimestre')">Último trimestre</button>
+        <button class="period-btn" data-period="año" onclick="setPeriod(this, 'año')">Año en curso</button>
+      </div>
+
+      <!-- KPI Cards -->
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-icon rosa">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <div class="kpi-value" id="kpiTotal">79</div>
+          <div class="kpi-label">Sesiones estéticas</div>
+          <span class="kpi-trend up" id="kpiTotalTrend">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg>
+            +12% vs período anterior
+          </span>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-icon dorado">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          </div>
+          <div class="kpi-value dorado" id="kpiRevenue">$4.2M</div>
+          <div class="kpi-label">Facturación estética</div>
+          <span class="kpi-trend up" id="kpiRevenueTrend">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg>
+            +18% vs período anterior
+          </span>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-icon verde">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          </div>
+          <div class="kpi-value" id="kpiPacientes">34</div>
+          <div class="kpi-label">Pacientes únicos</div>
+          <span class="kpi-trend up" id="kpiPacientesTrend">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg>
+            +5 nuevos
+          </span>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-icon gris">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          </div>
+          <div class="kpi-value" id="kpiDuracion">38</div>
+          <div class="kpi-label">Duración prom. (min)</div>
+          <span class="kpi-trend down" id="kpiDuracionTrend">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+            −3 min vs período ant.
+          </span>
+        </div>
+      </div>
+
+      <!-- Gráfico principal + Drill-down -->
+      <div class="charts-layout">
+
+        <!-- Gráfico de barras Top 5 -->
+        <div class="chart-card">
+          <div class="chart-header">
+            <div>
+              <h2 class="chart-title">Top 5 <em>tratamientos</em></h2>
+              <p class="chart-subtitle" id="chartSubtitle">Medicina Estética · Abril 2026</p>
+            </div>
+            <p class="chart-hint">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              Clic en una barra para ver insumos
+            </p>
+          </div>
+          <div class="chart-canvas-wrap">
+            <canvas id="top5Chart"></canvas>
+          </div>
+        </div>
+
+        <!-- Panel drill-down insumos -->
+        <div class="drilldown-card" id="drilldownCard">
+          <!-- Estado por defecto -->
+          <div class="drilldown-default" id="drilldownDefault">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+              <polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/>
+            </svg>
+            <p>Seleccioná un tratamiento en el gráfico para ver los insumos de stock relacionados.</p>
+          </div>
+          <!-- Contenido dinámico (oculto por defecto) -->
+          <div id="drilldownContent" style="display:none;">
+            <div class="drilldown-header">
+              <p class="drilldown-pretitle">Insumos relacionados</p>
+              <p class="drilldown-name" id="ddName">—</p>
+              <p class="drilldown-count" id="ddCount">—</p>
+            </div>
+            <div class="drilldown-body">
+              <p class="drilldown-section-title">Stock actual</p>
+              <ul class="insumo-list" id="ddInsumoList"></ul>
+              <a href="stock.html" class="btn-stock-link">
+                Ver inventario completo
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+              </a>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /.charts-layout -->
+
+      <!-- Ranking detallado -->
+      <div class="ranking-card">
+        <div class="ranking-header">
+          <h3 class="ranking-title">Ranking <em>completo</em></h3>
+          <span style="font-size:0.72rem;color:var(--gris);" id="rankingPeriodLabel">Abril 2026</span>
+        </div>
+        <ul class="ranking-list" id="rankingList"></ul>
+      </div>
+
+    </div><!-- /.content -->
+  </main>
+</div>
+
+<script>
+  /* ══════════════════════════════════════
+     DATOS MOCK POR PERÍODO
+  ══════════════════════════════════════ */
+  const DATA = {
+    mes: {
+      label: 'Abril 2026',
+      kpi: { total: 79, revenue: '$4.2M', pacientes: 34, duracion: 38 },
+      trends: { total: '+12% vs período anterior', revenue: '+18% vs período anterior', pacientes: '+5 nuevos', duracion: '−3 min vs período ant.' },
+      trendDir: { total: 'up', revenue: 'up', pacientes: 'up', duracion: 'down' },
+      top5: [
+        { name: 'Toxina Botulínica',   count: 28, color: '#D4AF37' },
+        { name: 'Ácido Hialurónico',   count: 19, color: '#FFB6D9' },
+        { name: 'Peeling Químico',     count: 14, color: '#E8D080' },
+        { name: 'Mesoterapia Facial',  count: 11, color: '#FFD6EC' },
+        { name: 'Relleno Labial',      count:  7, color: '#FBF6E3' },
+      ]
+    },
+    trimestre: {
+      label: 'Ene — Mar 2026',
+      kpi: { total: 214, revenue: '$11.8M', pacientes: 67, duracion: 41 },
+      trends: { total: '+8% vs trim. anterior', revenue: '+14% vs trim. anterior', pacientes: '+11 nuevos', duracion: '+2 min vs trim. ant.' },
+      trendDir: { total: 'up', revenue: 'up', pacientes: 'up', duracion: 'up' },
+      top5: [
+        { name: 'Toxina Botulínica',   count: 74, color: '#D4AF37' },
+        { name: 'Ácido Hialurónico',   count: 52, color: '#FFB6D9' },
+        { name: 'Mesoterapia Facial',  count: 40, color: '#E8D080' },
+        { name: 'Peeling Químico',     count: 28, color: '#FFD6EC' },
+        { name: 'Bioestimulador',      count: 20, color: '#FBF6E3' },
+      ]
+    },
+    año: {
+      label: 'Año 2026',
+      kpi: { total: 293, revenue: '$16.0M', pacientes: 89, duracion: 40 },
+      trends: { total: '+21% vs 2025', revenue: '+29% vs 2025', pacientes: '+22 nuevos', duracion: '−1 min vs 2025' },
+      trendDir: { total: 'up', revenue: 'up', pacientes: 'up', duracion: 'down' },
+      top5: [
+        { name: 'Toxina Botulínica',   count: 102, color: '#D4AF37' },
+        { name: 'Ácido Hialurónico',   count:  71, color: '#FFB6D9' },
+        { name: 'Mesoterapia Facial',  count:  51, color: '#E8D080' },
+        { name: 'Peeling Químico',     count:  42, color: '#FFD6EC' },
+        { name: 'Bioestimulador',      count:  27, color: '#FBF6E3' },
+      ]
+    }
+  };
+
+  /* Insumos relacionados por tratamiento */
+  const INSUMOS = {
+    'Toxina Botulínica': [
+      { name: 'Botox® 100 U (Allergan)', sku: 'INS-001', stock: 18, min: 10, status: 'ok' },
+      { name: 'Jeringas 1 ml BD',        sku: 'INS-042', stock:  3, min:  8, status: 'crit' },
+      { name: 'Agujas 30G × 0.5"',       sku: 'INS-043', stock: 60, min: 20, status: 'ok' },
+      { name: 'Solución salina 9%',       sku: 'INS-011', stock:  7, min:  5, status: 'low' },
+    ],
+    'Ácido Hialurónico': [
+      { name: 'Restylane® Lyft 1 ml',    sku: 'INS-010', stock:  5, min:  6, status: 'low' },
+      { name: 'Juvéderm® Ultra 1 ml',    sku: 'INS-012', stock:  9, min:  5, status: 'ok' },
+      { name: 'Agujas cánula 25G',        sku: 'INS-044', stock: 25, min: 10, status: 'ok' },
+      { name: 'Lidocaína tópica 4%',      sku: 'INS-015', stock:  2, min:  4, status: 'crit' },
+    ],
+    'Peeling Químico': [
+      { name: 'Ácido glicólico 30%',      sku: 'INS-020', stock: 12, min:  5, status: 'ok' },
+      { name: 'Ácido salicílico 20%',     sku: 'INS-021', stock:  8, min:  5, status: 'ok' },
+      { name: 'Gasas estériles 10×10',    sku: 'INS-050', stock: 40, min: 20, status: 'ok' },
+      { name: 'Neutralizador pH',         sku: 'INS-022', stock:  3, min:  4, status: 'crit' },
+    ],
+    'Mesoterapia Facial': [
+      { name: 'Cóctel vitamínico NCTF',   sku: 'INS-030', stock: 14, min:  8, status: 'ok' },
+      { name: 'Ácido hialur. bajo PM',    sku: 'INS-031', stock:  6, min:  5, status: 'ok' },
+      { name: 'Jeringas Meso 4 ml',       sku: 'INS-045', stock:  4, min:  6, status: 'low' },
+      { name: 'Agujas 32G × 4 mm',        sku: 'INS-046', stock: 80, min: 30, status: 'ok' },
+    ],
+    'Relleno Labial': [
+      { name: 'Juvéderm® Volbella 1 ml',  sku: 'INS-013', stock:  4, min:  5, status: 'low' },
+      { name: 'Lidocaína tópica 4%',      sku: 'INS-015', stock:  2, min:  4, status: 'crit' },
+      { name: 'Agujas cánula 27G',        sku: 'INS-047', stock: 18, min: 10, status: 'ok' },
+    ],
+    'Bioestimulador': [
+      { name: 'Sculptra® (PLLA)',         sku: 'INS-016', stock:  6, min:  4, status: 'ok' },
+      { name: 'Radiesse® 1.5 ml',        sku: 'INS-017', stock:  3, min:  3, status: 'ok' },
+      { name: 'Jeringas 2 ml BD',         sku: 'INS-048', stock: 10, min:  8, status: 'ok' },
+    ],
+  };
+
+  /* ══════════════════════════════════════
+     ESTADO DE LA APLICACIÓN
+  ══════════════════════════════════════ */
+  let currentPeriod = 'mes';
+  let chart = null;
+
+  /* ── Helpers ── */
+  function stockLabel(status, stock) {
+    if (status === 'ok')   return `<span class="insumo-stock-badge stock-ok">Stock OK · ${stock} u.</span>`;
+    if (status === 'low')  return `<span class="insumo-stock-badge stock-low">Stock bajo · ${stock} u.</span>`;
+    return                        `<span class="insumo-stock-badge stock-crit">Crítico · ${stock} u.</span>`;
+  }
+
+  function upArrow() {
+    return `<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg>`;
+  }
+  function downArrow() {
+    return `<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>`;
+  }
+
+  /* ── Renderiza KPIs ── */
+  function renderKPIs(d) {
+    document.getElementById('kpiTotal').textContent     = d.kpi.total;
+    document.getElementById('kpiRevenue').textContent   = d.kpi.revenue;
+    document.getElementById('kpiPacientes').textContent = d.kpi.pacientes;
+    document.getElementById('kpiDuracion').textContent  = d.kpi.duracion;
+
+    ['Total','Revenue','Pacientes','Duracion'].forEach(k => {
+      const key    = k.toLowerCase();
+      const el     = document.getElementById('kpi' + k + 'Trend');
+      const dir    = d.trendDir[key];
+      const isUp   = dir === 'up';
+      el.className = 'kpi-trend ' + dir;
+      el.innerHTML = (isUp ? upArrow() : downArrow()) + d.trends[key];
+    });
+  }
+
+  /* ── Renderiza ranking ── */
+  function renderRanking(top5) {
+    const posClasses = ['gold', 'silver', 'bronze', '', ''];
+    const maxCount   = top5[0].count;
+    const html       = top5.map((t, i) => `
+      <li class="ranking-row">
+        <span class="ranking-pos ${posClasses[i]}">${i + 1}</span>
+        <div class="ranking-bar-wrap">
+          <div class="ranking-bar-label">${t.name}</div>
+          <div class="ranking-bar-track">
+            <div class="ranking-bar-fill"
+                 style="width:${Math.round((t.count / maxCount) * 100)}%;background:${i < 2 ? 'var(--dorado)' : 'var(--rosa)'};">
+            </div>
+          </div>
+        </div>
+        <div class="ranking-count">${t.count}<br><span>sesiones</span></div>
+      </li>
+    `).join('');
+    document.getElementById('rankingList').innerHTML = html;
+  }
+
+  /* ── Renderiza drill-down ── */
+  function renderDrilldown(tratamiento, count) {
+    const card     = document.getElementById('drilldownCard');
+    const defEl    = document.getElementById('drilldownDefault');
+    const contentEl= document.getElementById('drilldownContent');
+    const insumos  = INSUMOS[tratamiento] || [];
+
+    document.getElementById('ddName').textContent  = tratamiento;
+    document.getElementById('ddCount').innerHTML   = `<strong>${count}</strong> sesiones en el período`;
+
+    const listHTML = insumos.map(ins => `
+      <li class="insumo-item">
+        <div class="insumo-left">
+          <span class="insumo-name">${ins.name}</span>
+          <span class="insumo-sku">${ins.sku}</span>
+        </div>
+        ${stockLabel(ins.status, ins.stock)}
+      </li>
+    `).join('');
+
+    document.getElementById('ddInsumoList').innerHTML = listHTML;
+    defEl.style.display     = 'none';
+    contentEl.style.display = 'block';
+    card.classList.add('highlighted');
+  }
+
+  /* ── Construye / actualiza el gráfico ── */
+  function buildChart(top5) {
+    const ctx = document.getElementById('top5Chart').getContext('2d');
+
+    /* Gradientes por barra */
+    const gradients = top5.map((t, i) => {
+      const g = ctx.createLinearGradient(0, 0, 0, 320);
+      if (i === 0) {
+        g.addColorStop(0, 'rgba(212,175,55,0.95)');
+        g.addColorStop(1, 'rgba(212,175,55,0.45)');
+      } else if (i === 1) {
+        g.addColorStop(0, 'rgba(245,144,196,0.9)');
+        g.addColorStop(1, 'rgba(245,144,196,0.35)');
+      } else {
+        g.addColorStop(0, 'rgba(212,175,55,0.55)');
+        g.addColorStop(1, 'rgba(212,175,55,0.18)');
+      }
+      return g;
+    });
+
+    const hoverColors = top5.map((_, i) =>
+      i === 0 ? '#D4AF37' : i === 1 ? '#F590C4' : '#C9A227'
+    );
+
+    if (chart) chart.destroy();
+
+    chart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: top5.map(t => t.name),
+        datasets: [{
+          label: 'Sesiones',
+          data: top5.map(t => t.count),
+          backgroundColor: gradients,
+          hoverBackgroundColor: hoverColors,
+          borderRadius: 8,
+          borderSkipped: false,
+          borderWidth: 0,
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        onClick(evt, elements) {
+          if (!elements.length) return;
+          const idx = elements[0].index;
+          renderDrilldown(top5[idx].name, top5[idx].count);
+        },
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            backgroundColor: '#1A1A1A',
+            titleColor: '#FFB6D9',
+            bodyColor: '#FFFFFF',
+            padding: 10,
+            cornerRadius: 8,
+            callbacks: {
+              label: ctx => ` ${ctx.parsed.y} sesiones`,
+            }
+          }
+        },
+        scales: {
+          x: {
+            grid: { display: false },
+            ticks: {
+              font: { family: "'Montserrat', sans-serif", size: 11 },
+              color: '#6B6B6B',
+              maxRotation: 20,
+            },
+            border: { display: false },
+          },
+          y: {
+            grid: { color: '#F0EBE3', drawBorder: false },
+            ticks: {
+              font: { family: "'Montserrat', sans-serif", size: 11 },
+              color: '#A8A8A8',
+              stepSize: 10,
+            },
+            border: { display: false, dash: [4, 4] },
+            beginAtZero: true,
+          }
+        },
+        animation: {
+          duration: 600,
+          easing: 'easeInOutQuart',
+        }
+      }
+    });
+  }
+
+  /* ── Actualiza toda la UI para un período ── */
+  function applyPeriod(period) {
+    const d = DATA[period];
+    renderKPIs(d);
+    buildChart(d.top5);
+    renderRanking(d.top5);
+
+    document.getElementById('chartSubtitle').textContent   = `Medicina Estética · ${d.label}`;
+    document.getElementById('rankingPeriodLabel').textContent = d.label;
+
+    /* Resetea drill-down al cambiar período */
+    document.getElementById('drilldownDefault').style.display  = 'block';
+    document.getElementById('drilldownContent').style.display  = 'none';
+    document.getElementById('drilldownCard').classList.remove('highlighted');
+  }
+
+  /* ── Selector de período ── */
+  function setPeriod(btn, period) {
+    document.querySelectorAll('.period-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentPeriod = period;
+    applyPeriod(period);
+  }
+
+  /* ── Sincronización: actualiza el badge cada minuto ── */
+  (function initSync() {
+    let minutes = 2;
+    function update() {
+      const el = document.getElementById('syncTime');
+      if (minutes < 1)        el.textContent = 'ahora mismo';
+      else if (minutes === 1) el.textContent = 'hace 1 min';
+      else                    el.textContent = `hace ${minutes} min`;
+    }
+    update();
+    setInterval(() => { minutes++; update(); }, 60000);
+  })();
+
+  /* ── Init ── */
+  applyPeriod('mes');
+</script>
+
+</body>
+</html>
