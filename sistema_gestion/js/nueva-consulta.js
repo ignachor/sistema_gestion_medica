@@ -1,3 +1,60 @@
+// --- PACIENTES: lista y selector desplegable ---
+const pacientes = [
+  { nombre: 'María González',    iniciales: 'MG', ultima: '15 Mar 2024' },
+  { nombre: 'Ana Martínez',      iniciales: 'AM', ultima: '02 Abr 2024' },
+  { nombre: 'Laura Fernández',   iniciales: 'LF', ultima: '20 Mar 2024' },
+  { nombre: 'Sofía Ramírez',     iniciales: 'SR', ultima: '10 Abr 2024' },
+  { nombre: 'Valentina López',   iniciales: 'VL', ultima: '05 Abr 2024' },
+  { nombre: 'Camila Torres',     iniciales: 'CT', ultima: '28 Mar 2024' },
+];
+
+let selectedPacienteIndex = 0;
+
+function renderPatientDropdown() {
+  const dropdown = document.getElementById('patientDropdown');
+  dropdown.innerHTML = pacientes.map((p, i) => `
+    <div class="patient-dropdown-item${i === selectedPacienteIndex ? ' selected' : ''}" onclick="selectPaciente(${i})">
+      <div class="patient-chip-avatar">${p.iniciales}</div>
+      <div>
+        <div class="patient-dropdown-name">${p.nombre}</div>
+        <div class="patient-dropdown-sub">Últimas consultas: ${p.ultima}</div>
+      </div>
+    </div>`).join('');
+}
+
+function selectPaciente(index) {
+  selectedPacienteIndex = index;
+  const p = pacientes[index];
+  document.getElementById('patientAvatar').textContent = p.iniciales;
+  document.getElementById('patientName').textContent = p.nombre;
+  document.getElementById('patientSub').textContent = 'Últimas consultas: ' + p.ultima;
+  closePatientDropdown();
+}
+
+function togglePatientDropdown() {
+  const dropdown = document.getElementById('patientDropdown');
+  const chevron = document.getElementById('patientChevron');
+  const isOpen = dropdown.classList.contains('open');
+  if (isOpen) {
+    closePatientDropdown();
+  } else {
+    renderPatientDropdown();
+    dropdown.classList.add('open');
+    chevron.classList.add('open');
+  }
+}
+
+function closePatientDropdown() {
+  document.getElementById('patientDropdown').classList.remove('open');
+  document.getElementById('patientChevron').classList.remove('open');
+}
+
+document.addEventListener('click', e => {
+  if (!document.getElementById('patientSelector').contains(e.target)) {
+    closePatientDropdown();
+  }
+});
+
 // --- FECHA: abre el calendario al hacer click en cualquier parte del campo ---
 document.addEventListener('DOMContentLoaded', () => {
   const abrirCalendario = input => {

@@ -22,12 +22,16 @@
 </div>
 
 <div class="consulta-content">
-  <div class="patient-chip">
-    <div class="patient-chip-avatar">MG</div>
-    <div>
-      <div class="patient-chip-name">María González</div>
-      <div class="patient-chip-sub">Últimas consultas: 15 Mar 2024</div>
+  <div class="patient-selector" id="patientSelector">
+    <div class="patient-chip patient-chip-trigger" id="patientChipTrigger" onclick="togglePatientDropdown()">
+      <div class="patient-chip-avatar" id="patientAvatar">MG</div>
+      <div class="patient-chip-info">
+        <div class="patient-chip-name" id="patientName">María González</div>
+        <div class="patient-chip-sub" id="patientSub">Últimas consultas: 15 Mar 2024</div>
+      </div>
+      <svg class="patient-chip-chevron" id="patientChevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
     </div>
+    <div class="patient-dropdown" id="patientDropdown"></div>
   </div>
 
   <!-- TIPO DE CONSULTA -->

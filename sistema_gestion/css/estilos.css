@@ -696,6 +696,34 @@ body.consulta-page{background:var(--gris-bg);}
 .patient-chip-name{font-size:0.95rem;font-weight:600;color:var(--negro);}
 .patient-chip-sub{font-size:0.72rem;color:var(--gris-light);margin-top:0.15rem;font-weight:300;}
 
+/* --- Patient selector dropdown --- */
+.patient-selector{position:relative;margin-bottom:2rem;}
+.patient-chip-trigger{cursor:pointer;margin-bottom:0;transition:border-color 0.2s;}
+.patient-chip-trigger:hover{border-color:var(--dorado);}
+.patient-chip-info{flex:1;}
+.patient-chip-chevron{color:var(--gris-light);transition:transform 0.22s;flex-shrink:0;}
+.patient-chip-chevron.open{transform:rotate(180deg);}
+.patient-dropdown{
+  position:absolute;top:calc(100% + 6px);left:0;right:0;
+  background:var(--blanco);border:1px solid var(--borde);
+  border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,0.08);
+  overflow:hidden;z-index:100;
+  display:none;max-height:260px;overflow-y:auto;
+}
+.patient-dropdown.open{display:block;}
+.patient-dropdown-item{
+  display:flex;align-items:center;gap:1rem;
+  padding:0.85rem 1.25rem;cursor:pointer;
+  transition:background 0.15s;
+  border-bottom:1px solid var(--borde);
+}
+.patient-dropdown-item:last-child{border-bottom:none;}
+.patient-dropdown-item:hover{background:var(--crema);}
+.patient-dropdown-item.selected{background:var(--rosa-pale);}
+.patient-dropdown-item .patient-chip-avatar{width:36px;height:36px;font-size:0.78rem;}
+.patient-dropdown-name{font-size:0.88rem;font-weight:600;color:var(--negro);}
+.patient-dropdown-sub{font-size:0.7rem;color:var(--gris-light);margin-top:0.1rem;font-weight:300;}
+
 .form-section{margin-bottom:2rem;}
 .form-section-title{
   font-size:0.72rem;font-weight:600;letter-spacing:0.1em;
